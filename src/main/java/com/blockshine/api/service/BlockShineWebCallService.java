@@ -55,4 +55,20 @@ public class BlockShineWebCallService {
 		return businessException;
 	}
 
+	public String getBestBlockNumber() {
+		JSONObject jo = HttpClientUtils.httpGet(bswurl + "/block/number");
+
+		return jo.toJSONString();
+	}
+
+	public String getBlockInfo(String bnOrId, boolean fullTransactionObjects) {
+		JSONObject jo = HttpClientUtils.httpGet(bswurl + "?bnOrId="+bnOrId+"&fullTransactionObjects="+fullTransactionObjects);
+		return null;
+	}
+
+	public String getBlocksEndWith(byte[] hash, Long qty) {
+		JSONObject jo = HttpClientUtils.httpGet(bswurl + "?hash="+hash+"&qty="+qty);
+
+		return jo.toString();
+	}
 }
