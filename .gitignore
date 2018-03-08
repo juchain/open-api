@@ -4,6 +4,7 @@
 .settings/
 bin/
 logs/
+/.idea/
 .idea/
 build/
 .DS_Store
