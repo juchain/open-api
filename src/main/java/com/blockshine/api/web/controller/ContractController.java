@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@Slf4j(topic = "api")
+@Slf4j(topic = "contractApi")
 @RequestMapping("/contract")
 public class ContractController extends BaseController {
 
 
     @RequestMapping("/compile")
     public R compileContract(@RequestBody ContractDTO dto){
+    	log.info("compile contract");
 
         return new R();
 
