@@ -2,6 +2,7 @@ package com.blockshine.common.web;
 
 import com.blockshine.common.constant.CodeConstant;
 import com.blockshine.common.exception.BusinessException;
+import com.blockshine.common.exception.InvalidTokenBusinessException;
 import com.blockshine.common.util.R;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,14 @@ public abstract class BaseController {
             r.put("code", businessException.getCode());
             r.put("msg", businessException.getMessage());
             return r;
-        }else{
+        }else if(e instanceof InvalidTokenBusinessException){
+            InvalidTokenBusinessException exception = (InvalidTokenBusinessException)e;
+            R r = new R();
+            r.put("code", exception.getCode());
+            r.put("msg", exception.getMessage());
+            return r;
+        }
+        else{
 
             R r = new R();
             r.put("code", CodeConstant.INTERAL_ERROR);
