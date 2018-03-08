@@ -1,8 +1,8 @@
 package com.blockshine.api.web.filter;
 
 import com.blockshine.common.config.JedisService;
+import com.blockshine.common.constant.CodeConstant;
 import com.blockshine.common.exception.InvalidTokenBusinessException;
-import com.blockshine.common.util.CodeConstant;
 import com.blockshine.common.util.JedisUtil;
 import com.blockshine.common.util.StringUtils;
 import org.slf4j.LoggerFactory;

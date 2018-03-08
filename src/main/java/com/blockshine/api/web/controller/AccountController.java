@@ -1,5 +1,6 @@
 package com.blockshine.api.web.controller;
 
+import com.blockshine.common.util.R;
 import com.blockshine.common.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,17 +21,21 @@ public class AccountController extends BaseController {
 	// 创建账户 是否改成post
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ResponseBody
-	public String bsw_newAddress(String secret, String name) {
-		log.info("bsw_newAddress");
-		return bswCallService.bsw_newAddress(secret, name);
+	public R addNewAddress(String secret, String name) {
+		String result = bswCallService.bsw_newAddress(secret, name);
+		R r = new R();
+		r.put("chainData", result);
+		return r;
 	}
 	
 	// 账户清单
 	@RequestMapping(value = "/accounts", method = RequestMethod.GET)
 	@ResponseBody
-	public String bsw_accounts() {
-		log.info("bsw_newAddress");
-		return 	bswCallService.bsw_accounts();
+	public R getAccountList() {
+		String result = bswCallService.bsw_accounts();
+		R r = new R();
+		r.put("chainData", result);
+		return r;
 	}
 
 
