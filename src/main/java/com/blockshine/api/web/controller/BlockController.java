@@ -16,14 +16,6 @@ public class BlockController {
 	BlockShineWebCallService bswCallService;
 
 
-//	// 查询余额
-//	@RequestMapping(value = "/account/balance", method = RequestMethod.GET)
-//	@ResponseBody
-//	public String bsw_getBalance(String address, String blockId) throws Exception {
-//		log.info("call accounts");
-//		return bswCallService.bsw_getBalance(address, blockId);
-//	}
-
 	//查询区块信息
 	//查询区块信息分页
 	//区间查询区块

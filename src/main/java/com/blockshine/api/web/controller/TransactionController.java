@@ -1,6 +1,5 @@
 package com.blockshine.api.web.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,21 +14,30 @@ public class TransactionController {
 	@Autowired
 	BlockShineWebCallService bswCallService;
 
+	// 查询交易总数
+	@RequestMapping(value = "/transaction/counts", method = RequestMethod.GET)
+	@ResponseBody
+	public String bsw_transactionCounts() throws Exception {
+		log.info("call trans counts");
+		return bswCallService.bsw_transactionCounts();
+	}
 
-//	// 查询余额
-//	@RequestMapping(value = "/account/balance", method = RequestMethod.GET)
-//	@ResponseBody
-//	public String bsw_getBalance(String address, String blockId) throws Exception {
-//		log.info("call accounts");
-//		return bswCallService.bsw_getBalance(address, blockId);
-//	}
+	// 查询交易信息
+	@RequestMapping(value = "/transaction/info", method = RequestMethod.GET)
+	@ResponseBody
+	public String bsw_transactionInfo(String hash) throws Exception {
+		log.info("call trans info");
+		return bswCallService.bsw_transactionInfo(hash);
+	}
 
-	//交易总数
-	//交易信息
-	//交易回执
-	//非法交易
+	// 交易回执
+	@RequestMapping(value = "/transaction/receipt", method = RequestMethod.GET)
+	@ResponseBody
+	public String bsw_transactionReceipt(String hash) throws Exception {
+		log.info("call trans info");
+		return bswCallService.bsw_transactionReceipt(hash);
+	}
 	
-	
-	
-	
+	// 非法交易 ？？？？
+
 }
