@@ -22,8 +22,10 @@ public class TransactionController extends BaseController{
 	@ResponseBody
 	public R transactionCounts() throws Exception {
 		log.info("call trans counts");
-//		return bswCallService.bsw_transactionCounts();
-		return new R();
+		R r = new R();
+		r.put("result", bswCallService.bsw_transactionCounts());
+		
+		return r;
 	}
 
 	// 查询交易信息

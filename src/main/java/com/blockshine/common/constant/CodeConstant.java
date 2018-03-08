@@ -1,4 +1,4 @@
-package com.blockshine.common.util;
+package com.blockshine.common.constant;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -55,6 +55,10 @@ public class CodeConstant {
      */
     public static final int EXCEPTION_TOKEN = 4000103;
 
+    /**
+     * 底层链错误
+     */
+    public static final int CHAIN_ERROR = 5000001;
 
 
     public static final String TOKEN = "token:";

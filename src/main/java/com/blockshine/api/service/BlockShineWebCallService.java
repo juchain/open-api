@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.blockshine.api.util.HttpClientUtils;
+import com.blockshine.common.constant.CodeConstant;
+import com.blockshine.common.exception.BusinessException;
+import com.blockshine.common.util.StringUtils;
 
 @Service
 public class BlockShineWebCallService {
@@ -45,6 +48,11 @@ public class BlockShineWebCallService {
 	
 	public String bsw_getBalance(String address, String blockId) {
 		return "123123123";
+	}
+	
+	private BusinessException createException(String message,int code) {
+		BusinessException businessException = new BusinessException(message, code);
+		return businessException;
 	}
 
 }

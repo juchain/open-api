@@ -21,18 +21,21 @@ public class AccountController extends BaseController {
 	// 创建账户 是否改成post
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ResponseBody
-	public R bsw_newAddress(String secret, String name) {
-		log.info("bsw_newAddress");
-//		return bswCallService.bsw_newAddress(secret, name);
-		return new R();
+	public R addNewAddress(String secret, String name) {
+		String result = bswCallService.bsw_newAddress(secret, name);
+		R r = new R();
+		r.put("chainData", result);
+		return r;
 	}
 	
 	// 账户清单
-	@RequestMapping(value = "/accounts", method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public R bsw_accounts() {
-		log.info("bsw_newAddress");
-		return 	bswCallService.bsw_accounts();
+	public R getAccountList() {
+		String result = bswCallService.bsw_accounts();
+		R r = new R();
+		r.put("chainData", result);
+		return r;
 	}
 
 
