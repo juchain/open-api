@@ -22,8 +22,10 @@ public class TransactionController extends BaseController{
 	@ResponseBody
 	public R transactionCounts() throws Exception {
 		log.info("call trans counts");
+		
+		String result = bswCallService.bsw_transactionCounts();
 		R r = new R();
-		r.put("result", bswCallService.bsw_transactionCounts());
+		r.put("chainData", result);
 		
 		return r;
 	}
@@ -33,7 +35,9 @@ public class TransactionController extends BaseController{
 	@ResponseBody
 	public R transactionInfo(String hash) throws Exception {
 		log.info("call trans info");
-//		return bswCallService.bsw_transactionInfo(hash);
+		String result = bswCallService.bsw_transactionInfo(hash);
+		R r = new R();
+		r.put("chainData", result);
 		return new R();
 	}
 
@@ -42,7 +46,9 @@ public class TransactionController extends BaseController{
 	@ResponseBody
 	public R transactionReceipt(String hash) throws Exception {
 		log.info("call trans info");
-//		return bswCallService.bsw_transactionReceipt(hash);
+		String result = bswCallService.bsw_transactionReceipt(hash);
+		R r = new R();
+		r.put("chainData", result);
 		return new R();
 	}
 	
