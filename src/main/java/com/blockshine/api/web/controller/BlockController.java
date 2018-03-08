@@ -10,12 +10,12 @@ import com.blockshine.api.service.BlockShineWebCallService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@Slf4j(topic = "api")
+@Slf4j(topic = "blockApi")
 public class BlockController {
+	
 	@Autowired
 	BlockShineWebCallService bswCallService;
-
-
+	
 	//查询区块信息
 	//查询区块信息分页
 	//区间查询区块
