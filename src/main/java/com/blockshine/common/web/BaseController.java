@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * 处理业务上的基本异常
+ * 基本异常处理类
+ *
+ * @author maxiaodong 
  */
 @RestController
 public abstract class BaseController {
