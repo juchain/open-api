@@ -30,8 +30,6 @@ public class AccessFilter implements Filter{
     private static List<String> patterns = new ArrayList<String>();
 
 
-
-
 //    private JedisService jedisService;
 
 
@@ -39,19 +37,21 @@ public class AccessFilter implements Filter{
     public void init(FilterConfig filterConfig) throws ServletException {
 
         //不存在的url 直接跳404
-        patterns.add("/token/apply");
-        patterns.add("/token/refresh");
-        patterns.add("/");
-        patterns.add("");
-        patterns.add("/api/account/login");
-        patterns.add("/api/account/register");
-
+//        patterns.add("/token/apply");
+//        patterns.add("/token/refresh");
+//        patterns.add("/");
+//        patterns.add("");
+//        patterns.add("/api/account/login");
+//        patterns.add("/api/account/register");
 //        ServletContext sc = filterConfig.getServletContext();
 //
 //        AnnotationConfigEmbeddedWebApplicationContext cxt = (AnnotationConfigEmbeddedWebApplicationContext) WebApplicationContextUtils.getWebApplicationContext(sc);
 //
 //        if(cxt != null && cxt.getBean("jedisService") != null && jedisService == null)
 //            jedisService = (JedisService) cxt.getBean("jedisService");
+
+
+
     }
 
 
@@ -70,47 +70,50 @@ public class AccessFilter implements Filter{
         //过滤不验证的url
         boolean checkUrl = isInclude(url);
 
-        //过滤资源文件
-        String[] sufix = {".jsp", ".jpg", ".png", ".css", ".js", ".img", ".gif", "ico", ".woff", ".otf", ".eot", ".svg", ".ttf", ".html"};
-        for (String s : sufix) {
-            if (s.equals(".js")) {
-                if (url.contains(s) && (!url.contains(".jsp") || !url.contains(".html"))) {
-                    checkUrl = true;
-                }
-            } else {
-                if (url.contains(s)) {
-                    checkUrl = true;
-                }
-            }
-
-        }
+        //过滤资源文件  没有网页不检查
+//        String[] sufix = {".jsp", ".jpg", ".png", ".css", ".js", ".img", ".gif", "ico", ".woff", ".otf", ".eot", ".svg", ".ttf", ".html"};
+//        for (String s : sufix) {
+//            if (s.equals(".js")) {
+//                if (url.contains(s) && (!url.contains(".jsp") || !url.contains(".html"))) {
+//                    checkUrl = true;
+//                }
+//            } else {
+//                if (url.contains(s)) {
+//                    checkUrl = true;
+//                }
+//            }
+//
+//        }
 
         if (checkUrl){
             chain.doFilter(httpRequest, httpResponse);
             return;
         } else {
-                String token = httpRequest.getHeader("token");
-                if(StringUtils.isEmpty(token)){
-                    throw new InvalidTokenBusinessException("token参数丢失",CodeConstant.PARAM_LOST);
-                }
+            processFilter(chain, httpRequest, httpResponse);
+            return;
+        }
 
-                String appId = JedisUtil.getJedis().get(token);
+    }
 
-                String redisToken = JedisUtil.getJedis().get(CodeConstant.TOKEN + appId);
+    private void processFilter(FilterChain chain, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException, ServletException {
+        String token = httpRequest.getHeader("token");
+        if(StringUtils.isEmpty(token)){
+            throw new InvalidTokenBusinessException("token参数丢失", CodeConstant.PARAM_LOST);
+        }
 
-                if(StringUtils.isEmpty(token) || StringUtils.isEmpty(appId)){
-                    throw new InvalidTokenBusinessException("token或者appId参数丢失",CodeConstant.PARAM_LOST);
-                }else if(StringUtils.isEmpty(redisToken)){
-                    throw new InvalidTokenBusinessException("token不存在",CodeConstant.NOT_TOKEN);
-                }else if(!redisToken.equals(token)){
-                    throw new InvalidTokenBusinessException("异常token",CodeConstant.EXCEPTION_TOKEN);
-                }else {
-                    chain.doFilter(httpRequest, httpResponse);
-                    return;
-                }
+        String appId = JedisUtil.getJedis().get(token);
+        String redisToken = JedisUtil.getJedis().get(CodeConstant.TOKEN + appId);
 
-            }
-
+        if(StringUtils.isEmpty(token) || StringUtils.isEmpty(appId)){
+            throw new InvalidTokenBusinessException("token或者appId参数丢失",CodeConstant.PARAM_LOST);
+        }else if(StringUtils.isEmpty(redisToken)){
+            throw new InvalidTokenBusinessException("token不存在",CodeConstant.NOT_TOKEN);
+        }else if(!redisToken.equals(token)){
+            throw new InvalidTokenBusinessException("异常token",CodeConstant.EXCEPTION_TOKEN);
+        }else {
+            chain.doFilter(httpRequest, httpResponse);
+            return;
+        }
     }
 
     @Override
