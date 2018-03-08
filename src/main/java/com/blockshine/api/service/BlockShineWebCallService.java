@@ -50,9 +50,4 @@ public class BlockShineWebCallService {
 		return "123123123";
 	}
 	
-	private BusinessException createException(String message,int code) {
-		BusinessException businessException = new BusinessException(message, code);
-		return businessException;
-	}
-
 }
