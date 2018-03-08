@@ -1,6 +1,7 @@
 package com.blockshine.api.web.controller;
 
 
+import com.blockshine.common.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,8 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j(topic = "blockApi")
-public class BlockController {
-	
+@RequestMapping("/block")
+public class BlockController extends BaseController {
+
 	@Autowired
 	BlockShineWebCallService bswCallService;
 	

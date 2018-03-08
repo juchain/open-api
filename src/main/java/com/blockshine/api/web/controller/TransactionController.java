@@ -1,5 +1,7 @@
 package com.blockshine.api.web.controller;
 
+import com.blockshine.common.util.R;
+import com.blockshine.common.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,33 +11,37 @@ import com.blockshine.api.service.BlockShineWebCallService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
+@RequestMapping("/transaction")
 @Slf4j(topic = "transactionApi")
-public class TransactionController {
+public class TransactionController extends BaseController{
 	@Autowired
 	BlockShineWebCallService bswCallService;
 
 	// 查询交易总数
-	@RequestMapping(value = "/transaction/counts", method = RequestMethod.GET)
+	@RequestMapping(value = "/counts", method = RequestMethod.GET)
 	@ResponseBody
-	public String bsw_transactionCounts() throws Exception {
+	public R transactionCounts() throws Exception {
 		log.info("call trans counts");
-		return bswCallService.bsw_transactionCounts();
+//		return bswCallService.bsw_transactionCounts();
+		return new R();
 	}
 
 	// 查询交易信息
-	@RequestMapping(value = "/transaction/info", method = RequestMethod.GET)
+	@RequestMapping(value = "/info", method = RequestMethod.GET)
 	@ResponseBody
-	public String bsw_transactionInfo(String hash) throws Exception {
+	public R transactionInfo(String hash) throws Exception {
 		log.info("call trans info");
-		return bswCallService.bsw_transactionInfo(hash);
+//		return bswCallService.bsw_transactionInfo(hash);
+		return new R();
 	}
 
 	// 交易回执
-	@RequestMapping(value = "/transaction/receipt", method = RequestMethod.GET)
+	@RequestMapping(value = "/receipt", method = RequestMethod.GET)
 	@ResponseBody
-	public String bsw_transactionReceipt(String hash) throws Exception {
+	public R transactionReceipt(String hash) throws Exception {
 		log.info("call trans info");
-		return bswCallService.bsw_transactionReceipt(hash);
+//		return bswCallService.bsw_transactionReceipt(hash);
+		return new R();
 	}
 	
 	// 非法交易 ？？？？
