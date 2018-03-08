@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/open-api.iml" filepath="$PROJECT_DIR$/.idea/modules/open-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/open-api_main.iml" filepath="$PROJECT_DIR$/.idea/modules/open-api_main.iml" group="open-api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/open-api_test.iml" filepath="$PROJECT_DIR$/.idea/modules/open-api_test.iml" group="open-api" />
+    </modules>
+  </component>
+</project>

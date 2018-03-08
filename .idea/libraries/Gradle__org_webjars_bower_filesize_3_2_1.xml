@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.webjars.bower:filesize:3.2.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars.bower/filesize/3.2.1/3c4dbf6469fa650096d1c0719692061049cd6209/filesize-3.2.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars.bower/filesize/3.2.1/b04f3ee8f5e43fa3b162981b50bb72fe1acabb33/filesize-3.2.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

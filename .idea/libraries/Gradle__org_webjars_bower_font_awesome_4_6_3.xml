@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.webjars.bower:font-awesome:4.6.3">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars.bower/font-awesome/4.6.3/7bff8b7ff56a903c22555ea3686014b61193011b/font-awesome-4.6.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars.bower/font-awesome/4.6.3/b04f3ee8f5e43fa3b162981b50bb72fe1acabb33/font-awesome-4.6.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
