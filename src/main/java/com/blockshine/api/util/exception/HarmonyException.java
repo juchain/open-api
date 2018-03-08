@@ -24,6 +24,10 @@ package com.blockshine.api.util.exception;
 public class HarmonyException extends RuntimeException {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5361994555812717846L;
+	/**
      * Might be useful on client side to understand exact cause of exception.
      */
     private int errorCode;

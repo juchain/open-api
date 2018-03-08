@@ -26,7 +26,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 
 import javax.net.ssl.*;
-import javax.security.cert.X509Certificate;
 import java.security.cert.CertificateException;
 
 /**

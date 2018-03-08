@@ -4,7 +4,12 @@ import static java.lang.String.format;
 
 public class BaseException extends RuntimeException {
 
-    public BaseException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4958775625092469866L;
+
+	public BaseException() {
         super();
     }
 

@@ -2,7 +2,12 @@ package com.blockshine.api.util.exception;
 
 public class ContractException extends BaseException {
 
-    public ContractException(String message) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2522284936202011270L;
+
+	public ContractException(String message) {
         super(message);
     }
 
