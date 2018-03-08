@@ -11,21 +11,13 @@ import com.blockshine.api.service.BlockShineWebCallService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@Slf4j(topic = "api")
+@Slf4j(topic = "blockApi")
 @RequestMapping("/block")
 public class BlockController extends BaseController {
+
 	@Autowired
 	BlockShineWebCallService bswCallService;
-
-
-//	// 查询余额
-//	@RequestMapping(value = "/account/balance", method = RequestMethod.GET)
-//	@ResponseBody
-//	public String bsw_getBalance(String address, String blockId) throws Exception {
-//		log.info("call accounts");
-//		return bswCallService.bsw_getBalance(address, blockId);
-//	}
-
+	
 	//查询区块信息
 	//查询区块信息分页
 	//区间查询区块

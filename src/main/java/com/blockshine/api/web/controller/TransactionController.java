@@ -1,6 +1,6 @@
 package com.blockshine.api.web.controller;
 
-
+import com.blockshine.common.util.R;
 import com.blockshine.common.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,27 +11,39 @@ import com.blockshine.api.service.BlockShineWebCallService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@Slf4j(topic = "api")
 @RequestMapping("/transaction")
-public class TransactionController extends BaseController {
+@Slf4j(topic = "transactionApi")
+public class TransactionController extends BaseController{
 	@Autowired
 	BlockShineWebCallService bswCallService;
 
+	// 查询交易总数
+	@RequestMapping(value = "/counts", method = RequestMethod.GET)
+	@ResponseBody
+	public R transactionCounts() throws Exception {
+		log.info("call trans counts");
+//		return bswCallService.bsw_transactionCounts();
+		return new R();
+	}
 
-//	// 查询余额
-//	@RequestMapping(value = "/account/balance", method = RequestMethod.GET)
-//	@ResponseBody
-//	public String bsw_getBalance(String address, String blockId) throws Exception {
-//		log.info("call accounts");
-//		return bswCallService.bsw_getBalance(address, blockId);
-//	}
+	// 查询交易信息
+	@RequestMapping(value = "/info", method = RequestMethod.GET)
+	@ResponseBody
+	public R transactionInfo(String hash) throws Exception {
+		log.info("call trans info");
+//		return bswCallService.bsw_transactionInfo(hash);
+		return new R();
+	}
 
-	//交易总数
-	//交易信息
-	//交易回执
-	//非法交易
+	// 交易回执
+	@RequestMapping(value = "/receipt", method = RequestMethod.GET)
+	@ResponseBody
+	public R transactionReceipt(String hash) throws Exception {
+		log.info("call trans info");
+//		return bswCallService.bsw_transactionReceipt(hash);
+		return new R();
+	}
 	
-	
-	
-	
+	// 非法交易 ？？？？
+
 }
