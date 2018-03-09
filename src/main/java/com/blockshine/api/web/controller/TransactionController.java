@@ -38,7 +38,7 @@ public class TransactionController extends BaseController{
 		String result = bswCallService.bsw_transactionInfo(hash);
 		R r = new R();
 		r.put("chainData", result);
-		return new R();
+		return r;
 	}
 
 	// 交易回执
@@ -49,7 +49,7 @@ public class TransactionController extends BaseController{
 		String result = bswCallService.bsw_transactionReceipt(hash);
 		R r = new R();
 		r.put("chainData", result);
-		return new R();
+		return r;
 	}
 	
 	// 非法交易 ？？？？
