@@ -41,8 +41,6 @@ public class BlockController extends BaseController {
 	}
 
 
-
-
 	/**
 	 *
 	 * 区块详情
