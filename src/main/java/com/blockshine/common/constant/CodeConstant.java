@@ -59,10 +59,16 @@ public class CodeConstant {
      * 底层链错误
      */
     public static final int CHAIN_ERROR = 5000001;
+    
+    /**
+     * 底层链无数据范湖
+     */
+    public static final int CHAIN_NODATA = 5000002;
 
 
     public static final String TOKEN = "token:";
 
     public static final String REFRESH_TOKEN = "token:refresh:";
+	
 
 }
