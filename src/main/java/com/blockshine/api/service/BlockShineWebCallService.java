@@ -45,17 +45,10 @@ public class BlockShineWebCallService {
 		return jo.toJSONString();
 	}
 	
-	
 	public String bsw_getBalance(String address, String blockId) {
 		return "123123123";
 	}
 	
-<<<<<<< HEAD
-	private BusinessException createException(String message,int code) {
-		BusinessException businessException = new BusinessException(message, code);
-		return businessException;
-	}
-
 	public String getBestBlockNumber() {
 		JSONObject jo = HttpClientUtils.httpGet(bswurl + "/block/number");
 
@@ -72,6 +65,4 @@ public class BlockShineWebCallService {
 
 		return jo.toString();
 	}
-=======
->>>>>>> 501e65ea293a81e6b18fb2ab29979efa1dd82d30
 }
