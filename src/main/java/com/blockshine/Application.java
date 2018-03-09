@@ -18,11 +18,6 @@
 
 package com.blockshine;
 
-import static java.util.Arrays.asList;
-
-import java.util.List;
-import java.util.Optional;
-
 import com.blockshine.api.web.filter.AccessFilter;
 import org.apache.coyote.http11.AbstractHttp11JsseProtocol;
 import org.apache.tomcat.util.net.Nio2Channel;
@@ -33,9 +28,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.servlet.Filter;
