@@ -43,12 +43,14 @@ public class AccountController extends BaseController {
 		return r;
 	}
 
-//	TODO
-	@GetMapping("/balance")
+	@RequestMapping(value = "/balance", method = RequestMethod.GET)
+	@ResponseBody
 	public R getAccountBalance(String address){
-
-	    return new R();
-
+		log.info("get account balance");
+		JSONObject result = bswCallService.bsw_getBalances(address);
+		R r = new R();
+		r.put("chainData", result);
+		return r;
     }
 
 

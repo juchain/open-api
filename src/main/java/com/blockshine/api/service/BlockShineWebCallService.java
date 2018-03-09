@@ -29,7 +29,8 @@ public class BlockShineWebCallService {
 
 	// 交易总数
 	public JSONObject bsw_transactionCounts(String address, String blockId) {
-		JSONObject jo = HttpClientUtils.httpGet(bswurl + "block/transactionCount?address="+address+"&blockId="+blockId);
+		JSONObject jo = HttpClientUtils
+				.httpGet(bswurl + "block/transactionCount?address=" + address + "&blockId=" + blockId);
 		return chainReturn(jo);
 	}
 
@@ -50,8 +51,7 @@ public class BlockShineWebCallService {
 	}
 
 	public JSONObject getBestBlockNumber() {
-		JSONObject jo = HttpClientUtils.httpGet(bswurl + "/block/number");
-
+		JSONObject jo = HttpClientUtils.httpGet(bswurl + "block/number");
 		return chainReturn(jo);
 	}
 
@@ -62,28 +62,38 @@ public class BlockShineWebCallService {
 	}
 
 	public JSONArray getBlocksEndWith(byte[] hash, Long qty) {
-		String hashStr="";
-		String qtyStr="";
-		if (hash!=null) {
+		String hashStr = "";
+		String qtyStr = "";
+		if (hash != null) {
 			hashStr = "&hash=" + hash;
 		}
-		if (qty!=null) {
+		if (qty != null) {
 			qtyStr = "&qty=" + qty;
 		}
-		JSONArray jo = HttpClientUtils.httpGetList(bswurl + "block/headers?1=1"+hashStr+qtyStr);
-		if (jo==null) {
-			throw new BusinessException("No ChainData",CodeConstant.CHAIN_NODATA);
-		}
-		return jo;
+		JSONArray jo = HttpClientUtils.httpGetList(bswurl + "block/headers?1=1" + hashStr + qtyStr);
+		return chainReturn(jo);
 	}
 
-	
-	//链返回空
+	public JSONObject bsw_getBalances(String address) {
+		JSONObject jo = HttpClientUtils.httpGet(bswurl + "account/balance?address="+address);
+		return chainReturn(jo);
+	}
+
+	// 链返回空实体
 	private JSONObject chainReturn(JSONObject jo) {
-		if (jo!=null) {
+		if (jo != null) {
 			return jo;
-		}else {
-			throw new BusinessException("No ChainData",CodeConstant.CHAIN_NODATA);
+		} else {
+			throw new BusinessException("No ChainData", CodeConstant.CHAIN_NODATA);
+		}
+	}
+
+	// 链返回空集合
+	private JSONArray chainReturn(JSONArray jo) {
+		if (jo != null) {
+			return jo;
+		} else {
+			throw new BusinessException("No ChainData", CodeConstant.CHAIN_NODATA);
 		}
 	}
 
