@@ -67,9 +67,8 @@ public class BlockController extends BaseController {
 	@RequestMapping(value = "/headers", method = RequestMethod.GET)
 	@ResponseBody
 	public R getBlocksEndWith(byte[] hash, Long qty) {
-
+		log.info("block headers");
 		JSONArray blockInfo = bswCallService.getBlocksEndWith(hash,qty);
-
 		R result = new R();
 		result.put("chainData", blockInfo);
 		return result;
