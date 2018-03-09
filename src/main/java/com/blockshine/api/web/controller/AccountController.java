@@ -4,12 +4,10 @@ import com.blockshine.common.util.R;
 import com.blockshine.common.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.fastjson.JSONObject;
 import com.blockshine.api.dto.AccountDTO;
 import com.blockshine.api.service.BlockShineWebCallService;
@@ -44,6 +42,14 @@ public class AccountController extends BaseController {
 		r.put("chainData", result);
 		return r;
 	}
+
+//	TODO
+	@GetMapping("/balance")
+	public R getAccountBalance(String address){
+
+	    return new R();
+
+    }
 
 
 	
