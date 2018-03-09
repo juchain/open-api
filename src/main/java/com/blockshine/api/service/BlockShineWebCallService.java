@@ -27,8 +27,8 @@ public class BlockShineWebCallService {
 	}
 
 	// 交易总数
-	public JSONObject bsw_transactionCounts() {
-		JSONObject jo = HttpClientUtils.httpGet(bswurl + "block/transactionCount?address=111&blockId=111");
+	public JSONObject bsw_transactionCounts(String address, String blockId) {
+		JSONObject jo = HttpClientUtils.httpGet(bswurl + "block/transactionCount?address="+address+"&blockId="+blockId);
 		return chainReturn(jo);
 	}
 
