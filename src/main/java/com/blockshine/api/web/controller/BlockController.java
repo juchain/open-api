@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.blockshine.api.service.BlockShineWebCallService;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +76,7 @@ public class BlockController extends BaseController {
 	@ResponseBody
 	public R getBlocksEndWith(byte[] hash, Long qty) {
 
-		JSONObject blockInfo = bswCallService.getBlocksEndWith(hash,qty);
+		JSONArray blockInfo = bswCallService.getBlocksEndWith(hash,qty);
 		R result = new R();
 		result.put("chainData", blockInfo);
 		return result;

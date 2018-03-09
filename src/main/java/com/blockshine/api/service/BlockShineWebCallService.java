@@ -3,6 +3,7 @@ package com.blockshine.api.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.blockshine.api.util.HttpClientUtils;
 import com.blockshine.common.constant.CodeConstant;
@@ -57,13 +58,23 @@ public class BlockShineWebCallService {
 	public JSONObject getBlockInfo(String bnOrId, boolean fullTransactionObjects) {
 		JSONObject jo = HttpClientUtils
 				.httpGet(bswurl + "block/info?bnOrId=" + bnOrId + "&fullTransactionObjects=" + fullTransactionObjects);
-		return jo;
+		return chainReturn(jo);
 	}
 
-	public JSONObject getBlocksEndWith(byte[] hash, Long qty) {
-		JSONObject jo = HttpClientUtils.httpGet(bswurl + "?hash=" + hash + "&qty=" + qty);
-
-		return chainReturn(jo);
+	public JSONArray getBlocksEndWith(byte[] hash, Long qty) {
+		String hashStr="";
+		String qtyStr="";
+		if (hash!=null) {
+			hashStr = "&hash=" + hash;
+		}
+		if (qty!=null) {
+			qtyStr = "&qty=" + qty;
+		}
+		JSONArray jo = HttpClientUtils.httpGetList(bswurl + "block/headers?1=1"+hashStr+qtyStr);
+		if (jo==null) {
+			throw new BusinessException("No ChainData",CodeConstant.CHAIN_NODATA);
+		}
+		return jo;
 	}
 
 	
