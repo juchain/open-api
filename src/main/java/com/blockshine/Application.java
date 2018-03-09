@@ -66,28 +66,28 @@ public class Application {
         return tomcatEmbeddedServletContainerFactory;
     }
 
-    /**
-     * 配置过滤器
-     * @return
-     */
-    @Bean
-    public FilterRegistrationBean someFilterRegistration() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(accessFilter());
-        registration.addUrlPatterns("/*");
-        registration.addInitParameter("paramName", "paramValue");
-        registration.setName("accessFilter");
-        return registration;
-    }
-
-    /**
-     * 创建一个bean
-     * @return`
-     */
-    @Bean(name = "accessFilter")
-    public Filter accessFilter() {
-        return new AccessFilter();
-    }
+//    /**
+//     * 配置过滤器
+//     * @return
+//     */
+//    @Bean
+//    public FilterRegistrationBean someFilterRegistration() {
+//        FilterRegistrationBean registration = new FilterRegistrationBean();
+//        registration.setFilter(accessFilter());
+//        registration.addUrlPatterns("/*");
+//        registration.addInitParameter("paramName", "paramValue");
+//        registration.setName("accessFilter");
+//        return registration;
+//    }
+//
+//    /**
+//     * 创建一个bean
+//     * @return`
+//     */
+//    @Bean(name = "accessFilter")
+//    public Filter accessFilter() {
+//        return new AccessFilter();
+//    }
 
 
     /**

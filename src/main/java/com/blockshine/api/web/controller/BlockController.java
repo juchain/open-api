@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.blockshine.api.service.BlockShineWebCallService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +31,7 @@ public class BlockController extends BaseController {
 	@RequestMapping(value = "/number", method = RequestMethod.GET)
 	@ResponseBody
 	public R eth_blockNumber() {
-		String blockNumberJson = bswCallService.getBestBlockNumber();
+		JSONObject blockNumberJson = bswCallService.getBestBlockNumber();
 		R result = new R();
 		result.put("chainData", blockNumberJson);
 		return result;
@@ -44,7 +47,8 @@ public class BlockController extends BaseController {
 	@RequestMapping(value = "/info", method = RequestMethod.GET)
 	@ResponseBody
 	public R getBlockInfo(String bnOrId, boolean fullTransactionObjects) {
-		String blockInfo = bswCallService.getBlockInfo(bnOrId,fullTransactionObjects);
+		JSONObject blockInfo = bswCallService.getBlockInfo(bnOrId,fullTransactionObjects);
+		System.out.println(blockInfo);
 		R result = new R();
 		result.put("chainData", blockInfo);
 		return result;
@@ -63,7 +67,9 @@ public class BlockController extends BaseController {
 	@RequestMapping(value = "/headers", method = RequestMethod.GET)
 	@ResponseBody
 	public R getBlocksEndWith(byte[] hash, Long qty) {
-		String blockInfo = bswCallService.getBlocksEndWith(hash,qty);
+
+		JSONArray blockInfo = bswCallService.getBlocksEndWith(hash,qty);
+
 		R result = new R();
 		result.put("chainData", blockInfo);
 		return result;
