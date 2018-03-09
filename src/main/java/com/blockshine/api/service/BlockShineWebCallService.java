@@ -15,60 +15,62 @@ public class BlockShineWebCallService {
 	private String bswurl;
 
 	// 账户清单
-	public String bsw_accounts() {
+	public JSONObject bsw_accounts() {
 		JSONObject jo = HttpClientUtils.httpGet(bswurl + "accounts");
 		return chainReturn(jo);
 	}
 
 	// 创建账户
-	public String bsw_newAddress(String secret, String name) {
+	public JSONObject bsw_newAddress(String secret, String name) {
 		JSONObject jo = HttpClientUtils.httpGet(bswurl + "account/create?name=" + name + "&secret=" + secret);
 		return chainReturn(jo);
 	}
 
 	// 交易总数
-	public String bsw_transactionCounts() {
+	public JSONObject bsw_transactionCounts() {
 		JSONObject jo = HttpClientUtils.httpGet(bswurl + "block/transactionCount?address=111&blockId=111");
 		return chainReturn(jo);
 	}
 
 	// 交易详情 by hash
-	public String bsw_transactionInfo(String hash) {
+	public JSONObject bsw_transactionInfo(String hash) {
 		JSONObject jo = HttpClientUtils.httpGet(bswurl + "transaction/info?hash=" + hash);
 		return chainReturn(jo);
 	}
 
 	// 交易回执
-	public String bsw_transactionReceipt(String hash) {
+	public JSONObject bsw_transactionReceipt(String hash) {
 		JSONObject jo = HttpClientUtils.httpGet(bswurl + "transaction/receipt?hash=" + hash);
 		return chainReturn(jo);
 	}
 
-	public String bsw_getBalance(String address, String blockId) {
-		return "123123123";
+	public JSONObject bsw_getBalance(String address, String blockId) {
+		return null;
 	}
 
-	public String getBestBlockNumber() {
+	public JSONObject getBestBlockNumber() {
 		JSONObject jo = HttpClientUtils.httpGet(bswurl + "/block/number");
 
 		return chainReturn(jo);
 	}
 
-	public String getBlockInfo(String bnOrId, boolean fullTransactionObjects) {
+	public JSONObject getBlockInfo(String bnOrId, boolean fullTransactionObjects) {
 		JSONObject jo = HttpClientUtils
 				.httpGet(bswurl + "?bnOrId=" + bnOrId + "&fullTransactionObjects=" + fullTransactionObjects);
 		return null;
 	}
 
-	public String getBlocksEndWith(byte[] hash, Long qty) {
+	public JSONObject getBlocksEndWith(byte[] hash, Long qty) {
 		JSONObject jo = HttpClientUtils.httpGet(bswurl + "?hash=" + hash + "&qty=" + qty);
 
-		return jo.toString();
+		return chainReturn(jo);
 	}
 
-	private String chainReturn(JSONObject jo) {
+	
+	//链返回空
+	private JSONObject chainReturn(JSONObject jo) {
 		if (jo!=null) {
-			return jo.toJSONString();
+			return jo;
 		}else {
 			throw new BusinessException("No ChainData",CodeConstant.CHAIN_NODATA);
 		}
