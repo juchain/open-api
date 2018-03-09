@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 基本异常处理类
  *
- * @author maxiaodong 
+ * @author maxiaodong
  */
 @RestController
 public abstract class BaseController {

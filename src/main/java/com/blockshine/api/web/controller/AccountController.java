@@ -3,10 +3,7 @@ package com.blockshine.api.web.controller;
 import com.blockshine.common.util.R;
 import com.blockshine.common.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.blockshine.api.service.BlockShineWebCallService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +36,14 @@ public class AccountController extends BaseController {
 		r.put("chainData", result);
 		return r;
 	}
+
+//	TODO
+	@GetMapping("/balance")
+	public R getAccountBalance(String address){
+
+	    return new R();
+
+    }
 
 
 	
