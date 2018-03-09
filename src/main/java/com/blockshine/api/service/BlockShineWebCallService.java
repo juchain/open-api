@@ -56,8 +56,8 @@ public class BlockShineWebCallService {
 
 	public JSONObject getBlockInfo(String bnOrId, boolean fullTransactionObjects) {
 		JSONObject jo = HttpClientUtils
-				.httpGet(bswurl + "?bnOrId=" + bnOrId + "&fullTransactionObjects=" + fullTransactionObjects);
-		return null;
+				.httpGet(bswurl + "block/info?bnOrId=" + bnOrId + "&fullTransactionObjects=" + fullTransactionObjects);
+		return jo;
 	}
 
 	public JSONObject getBlocksEndWith(byte[] hash, Long qty) {

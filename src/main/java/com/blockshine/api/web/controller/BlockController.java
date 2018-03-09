@@ -33,7 +33,7 @@ public class BlockController extends BaseController {
 	 *
 	 * @return
 	 */
-	@RequestMapping(value = "/block/number", method = RequestMethod.GET)
+	@RequestMapping(value = "/number", method = RequestMethod.GET)
 	@ResponseBody
 	public R eth_blockNumber() {
 		JSONObject blockNumberJson = bswCallService.getBestBlockNumber();
@@ -51,10 +51,11 @@ public class BlockController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/block/info", method = RequestMethod.GET)
+	@RequestMapping(value = "/info", method = RequestMethod.GET)
 	@ResponseBody
 	public R getBlockInfo(String bnOrId, boolean fullTransactionObjects) {
 		JSONObject blockInfo = bswCallService.getBlockInfo(bnOrId,fullTransactionObjects);
+		System.out.println(blockInfo);
 		R result = new R();
 		result.put("chainData", blockInfo);
 		return result;
@@ -70,7 +71,7 @@ public class BlockController extends BaseController {
 	 * @throws Exception
 	 */
 	//查询一组区块头信息 从 指定hash开始 固定 qty条
-	@RequestMapping(value = "/block/headers", method = RequestMethod.GET)
+	@RequestMapping(value = "/headers", method = RequestMethod.GET)
 	@ResponseBody
 	public R getBlocksEndWith(byte[] hash, Long qty) {
 
