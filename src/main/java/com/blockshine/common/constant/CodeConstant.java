@@ -29,6 +29,17 @@ public class CodeConstant {
     public static final int PARAM_ERROR = 1000201;
 
     /**
+     * token 不存在
+     */
+    public static final int NOT_TOKEN = 1000301;
+
+
+    /**
+     * token不正确
+     */
+    public static final int EXCEPTION_TOKEN = 1000302;
+
+    /**
      * 服务器内部错误
      */
     public static final int INTERAL_ERROR = 2000101;
@@ -44,16 +55,6 @@ public class CodeConstant {
     public static final int SERVICE_REFUSED = 4000101;
 
 
-    /**
-     * token 不存在
-     */
-    public static final int NOT_TOKEN = 4000102;
-
-
-    /**
-     * token不正确
-     */
-    public static final int EXCEPTION_TOKEN = 4000103;
 
     /**
      * 底层链错误
@@ -61,7 +62,7 @@ public class CodeConstant {
     public static final int CHAIN_ERROR = 5000001;
     
     /**
-     * 底层链无数据范湖
+     * 底层链无数据返回
      */
     public static final int CHAIN_NODATA = 5000002;
 
