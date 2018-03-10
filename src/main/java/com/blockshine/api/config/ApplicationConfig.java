@@ -45,7 +45,7 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter {
      * https://github.com/briandilley/jsonrpc4j/issues/69
      */
     @Bean
-    @SuppressWarnings({"unchecked", "deprecation"})
+    @SuppressWarnings("deprecation")
     // full class path to avoid deprecation warning
     public com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceExporter exporter() {
         com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceExporter serviceExporter = new com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceExporter();

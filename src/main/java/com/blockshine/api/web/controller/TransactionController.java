@@ -1,6 +1,7 @@
 package com.blockshine.api.web.controller;
 
 import com.blockshine.common.util.R;
+import com.blockshine.common.util.StringUtils;
 import com.blockshine.common.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,17 +16,19 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/transaction")
 @Slf4j(topic = "transactionApi")
-public class TransactionController extends BaseController{
+public class TransactionController extends BaseController {
 	@Autowired
 	BlockShineWebCallService bswCallService;
 
 	// 查询交易总数
 	@RequestMapping(value = "/counts", method = RequestMethod.GET)
 	@ResponseBody
-	public R transactionCounts() throws Exception {
+	public R transactionCounts(String address, String blockId) throws Exception {
 		log.info("call trans counts");
-		
-		JSONObject result = bswCallService.bsw_transactionCounts();
+		if (StringUtils.isEmpty(blockId)) {
+			blockId = "pending";
+		}
+		JSONObject result = bswCallService.bsw_transactionCounts(address, blockId);
 		R r = new R();
 		r.put("chainData", result);
 		
@@ -53,7 +56,7 @@ public class TransactionController extends BaseController{
 		r.put("chainData", result);
 		return r;
 	}
-	
+
 	// 非法交易 ？？？？
 
 }
