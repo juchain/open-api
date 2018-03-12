@@ -1,6 +1,6 @@
 spring:
   redis:
-    host: 47.100.174.228
+    host: redis-server
     port: 6379
     password:
     # 连接超时时间（毫秒）
