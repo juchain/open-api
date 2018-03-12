@@ -57,7 +57,7 @@ public class AccessFilter implements Filter {
 		if (StringUtils.isEmpty(token)) {
 			doPrintWriter(httpResponse, CodeConstant.PARAM_LOST, "token参数丢失");
 		} else if (!JedisUtil.hasKey(token)) {
-			doPrintWriter(httpResponse, CodeConstant.PARAM_LOST, "无效token");
+			doPrintWriter(httpResponse, CodeConstant.EXPIRED_TOKEN, "token终止，请重新获取!");
 		} else {
 			chain.doFilter(httpRequest, httpResponse);
 		}
