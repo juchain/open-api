@@ -40,6 +40,12 @@ public class CodeConstant {
     public static final int EXCEPTION_TOKEN = 1000302;
 
     /**
+     * token终止
+     */
+    public static final int EXPIRED_TOKEN = 1000303;
+
+
+    /**
      * 服务器内部错误
      */
     public static final int INTERAL_ERROR = 2000101;
