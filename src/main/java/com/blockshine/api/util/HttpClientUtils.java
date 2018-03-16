@@ -200,5 +200,53 @@ public class HttpClientUtils {
 		}
 		return jsonResult;
 	}
+	
+	
+	/**
+	 * post请求传输json参数
+	 * 
+	 * @param url
+	 *            url地址
+	 * @param json
+	 *            参数
+	 * @return
+	 */
+	public static JSONObject testPost(String url, JSONObject jsonParam) {
+		// post请求返回结果
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		JSONObject jsonResult = null;
+		HttpPost httpPost = new HttpPost(url);
+		// 设置请求和传输超时时间
+		httpPost.setConfig(requestConfig);
+		try {
+			if (null != jsonParam) {
+				// 解决中文乱码问题
+				StringEntity entity = new StringEntity(jsonParam.toString(), "utf-8");
+				entity.setContentEncoding("UTF-8");
+				entity.setContentType("application/json");
+				httpPost.setEntity(entity);
+			}
+			CloseableHttpResponse result = httpClient.execute(httpPost);
+			// 请求发送成功，并得到响应
+			if (result.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				String str = "";
+				try {
+					// 读取服务器返回过来的json字符串数据
+					str = EntityUtils.toString(result.getEntity(), "utf-8");
+					// 把json字符串转换成json对象
+					jsonResult = JSONObject.parseObject(str);
+				} catch (Exception e) {
+					logger.error("post请求提交失败:" + url, e);
+					throw new BusinessException(e.getMessage(),CodeConstant.CHAIN_ERROR);
+				}
+			}
+		} catch (IOException e) {
+			logger.error("post请求提交失败:" + url, e);
+			throw new BusinessException(e.getMessage(),CodeConstant.CHAIN_ERROR);
+		} finally {
+			httpPost.releaseConnection();
+		}
+		return jsonResult;
+	}
 
 }
