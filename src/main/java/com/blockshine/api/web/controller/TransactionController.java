@@ -31,7 +31,7 @@ public class TransactionController extends BaseController {
 		JSONObject result = bswCallService.bsw_transactionCounts(address, blockId);
 		R r = new R();
 		r.put("chainData", result);
-		
+
 		return r;
 	}
 

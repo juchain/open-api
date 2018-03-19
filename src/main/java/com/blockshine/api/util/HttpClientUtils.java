@@ -70,16 +70,16 @@ public class HttpClientUtils {
 					jsonResult = JSONObject.parseObject(str);
 				} catch (Exception e) {
 					logger.error("post请求提交失败:" + url, e);
-					throw new BusinessException(e.getMessage(),CodeConstant.CHAIN_ERROR);
+					throw new BusinessException(e.getMessage(), CodeConstant.CHAIN_ERROR);
 				}
 			}
 		} catch (IOException e) {
 			logger.error("post请求提交失败:" + url, e);
-			throw new BusinessException(e.getMessage(),CodeConstant.CHAIN_ERROR);
+			throw new BusinessException(e.getMessage(), CodeConstant.CHAIN_ERROR);
 		} finally {
 			httpPost.releaseConnection();
 		}
-		return jsonResult;
+		return chainReturn(jsonResult);
 	}
 
 	/**
@@ -117,16 +117,16 @@ public class HttpClientUtils {
 					jsonResult = JSONObject.parseObject(str);
 				} catch (Exception e) {
 					logger.error("post请求提交失败:" + url, e);
-					throw new BusinessException(e.getMessage(),CodeConstant.CHAIN_ERROR);
+					throw new BusinessException(e.getMessage(), CodeConstant.CHAIN_ERROR);
 				}
 			}
 		} catch (IOException e) {
 			logger.error("post请求提交失败:" + url, e);
-			throw new BusinessException(e.getMessage(),CodeConstant.CHAIN_ERROR);
+			throw new BusinessException(e.getMessage(), CodeConstant.CHAIN_ERROR);
 		} finally {
 			httpPost.releaseConnection();
 		}
-		return jsonResult;
+		return chainReturn(jsonResult);
 	}
 
 	/**
@@ -158,13 +158,13 @@ public class HttpClientUtils {
 			}
 		} catch (IOException e) {
 			logger.error("get请求提交失败:" + url, e);
-			throw new BusinessException(e.getMessage(),CodeConstant.CHAIN_ERROR);
+			throw new BusinessException(e.getMessage(), CodeConstant.CHAIN_ERROR);
 		} finally {
 			request.releaseConnection();
 		}
-		return jsonResult;
+		return chainReturn(jsonResult);
 	}
-	
+
 	/**
 	 * 发送get请求
 	 * 
@@ -194,14 +194,31 @@ public class HttpClientUtils {
 			}
 		} catch (IOException e) {
 			logger.error("get请求提交失败:" + url, e);
-			throw new BusinessException(e.getMessage(),CodeConstant.CHAIN_ERROR);
+			throw new BusinessException(e.getMessage(), CodeConstant.CHAIN_ERROR);
 		} finally {
 			request.releaseConnection();
 		}
-		return jsonResult;
+		return chainReturn(jsonResult);
 	}
-	
-	
+
+	// 链返回空实体
+	public static JSONObject chainReturn(JSONObject jo) {
+		if (jo != null) {
+			return jo;
+		} else {
+			throw new BusinessException("No ChainData", CodeConstant.CHAIN_NODATA);
+		}
+	}
+
+	// 链返回空集合
+	public static JSONArray chainReturn(JSONArray jo) {
+		if (jo != null) {
+			return jo;
+		} else {
+			throw new BusinessException("No ChainData", CodeConstant.CHAIN_NODATA);
+		}
+	}
+
 	/**
 	 * post请求传输json参数
 	 * 
@@ -237,16 +254,16 @@ public class HttpClientUtils {
 					jsonResult = JSONObject.parseObject(str);
 				} catch (Exception e) {
 					logger.error("post请求提交失败:" + url, e);
-					throw new BusinessException(e.getMessage(),CodeConstant.CHAIN_ERROR);
+					throw new BusinessException(e.getMessage(), CodeConstant.CHAIN_ERROR);
 				}
 			}
 		} catch (IOException e) {
 			logger.error("post请求提交失败:" + url, e);
-			throw new BusinessException(e.getMessage(),CodeConstant.CHAIN_ERROR);
+			throw new BusinessException(e.getMessage(), CodeConstant.CHAIN_ERROR);
 		} finally {
 			httpPost.releaseConnection();
 		}
-		return jsonResult;
+		return chainReturn(jsonResult);
 	}
 
 }

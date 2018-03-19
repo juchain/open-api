@@ -27,7 +27,7 @@ public class AccountController extends BaseController {
 	@Autowired
 	BlockShineWebCallService bswCallService;
 
-	// 创建账户 是否改成post
+	// 创建账户
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ResponseBody
 	public R addNewAddress(@RequestBody AccountDTO adto ) {
@@ -49,6 +49,8 @@ public class AccountController extends BaseController {
 		return r;
 	}
 
+	
+	//余额查询
 	@RequestMapping(value = "/balance", method = RequestMethod.GET)
 	@ResponseBody
 	public R getAccountBalance(String address){
@@ -59,6 +61,7 @@ public class AccountController extends BaseController {
 		return r;
     }
 
+	//数据上链测试
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> test(String size) throws InterruptedException{
