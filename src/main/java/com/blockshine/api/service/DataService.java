@@ -1,15 +1,23 @@
 package com.blockshine.api.service;
 
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.blockshine.api.dao.AddressDao;
+import com.blockshine.api.dao.ChainDao;
+import com.blockshine.api.domain.AddressDO;
+import com.blockshine.api.domain.ChainDO;
+import com.blockshine.api.util.HttpClientUtils;
+import com.blockshine.common.config.JedisService;
+import com.blockshine.common.constant.CodeConstant;
+import com.blockshine.common.exception.BusinessException;
+import com.blockshine.common.exception.InvalidTokenBusinessException;
+import com.blockshine.common.util.JedisUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.blockshine.api.util.HttpClientUtils;
+import java.math.BigInteger;
+import java.util.*;
 
 @Service
 public class DataService {
@@ -17,60 +25,109 @@ public class DataService {
 	@Value("${bswurl}")
 	private String bswurl;
 
-	public JSONObject wirteDataToChain(String data) {
-		// 企业 address from
-		String from = "";
-		// 企业 address to
-		String to = "";
-		// 企业 password
-		String password = "";
-		// 企业 上链数据
-		data = "";
-		// 企业 上链请求nonce
-		String nonce = nonce(from);
+	@Autowired
+	private ChainDao chainDao;
 
-		String jsonData = jsonData(from, to, password, data, nonce);
+	@Autowired
+	private AddressDao addressDao;
+
+
+	@Autowired
+	JedisService jedisService;
+
+
+
+
+	public JSONObject wirteDataToChain(String data, String token) {
+
+		if(!JedisUtil.hasKey(token)){
+			throw  new InvalidTokenBusinessException("token 不存在",CodeConstant.NOT_TOKEN);
+		}
+		String appKey = JedisUtil.getByKey(token);
+		Map<String, Object> parms = new HashMap<>(1);
+		parms.put("appKey",appKey);
+		List<AddressDO> list = addressDao.list(parms);
+		if(!Optional.ofNullable(list).isPresent()){
+			throw  new BusinessException("开户地址不存在",CodeConstant.NOT_EXIST_ADDRESS_ERROR);
+		}
+		AddressDO addressDO = list.get(0);
+		// 企业 上链请求nonce
+		String nonce = getNonce(addressDO.getAddressFrom());
+
+		String jsonData = jsonData(addressDO.getAddressFrom(), addressDO.getAddressTo(), addressDO.getAddressTo(), data, nonce);
+
+		ChainDO chainDO = gennerateChainDo(addressDO, jsonData, nonce);
+
+		int save = chainDao.save(chainDO);
 
 		JSONObject jo = HttpClientUtils.httpPost(bswurl + "data/write", JSONObject.parseObject(jsonData));
-		// 交易回执写入数据库 数据上链 流水表 todo
+
+		ChainDO updataChainDo= new ChainDO();
+		if(jo.get("code").equals(0)){
+			updataChainDo.setReceipt(jo.get("receipt").toString());
+		}
+		updataChainDo.setId(chainDO.getId());
+		updataChainDo.setUpdated(new Date());
+		updataChainDo.setMessage(jo.get("message").toString());
+		chainDao.update(updataChainDo);
 		return jo;
 	}
 
+	private ChainDO gennerateChainDo(AddressDO addressDO, String data, String nonce) {
+		ChainDO chainDO = new ChainDO();
+		chainDO.setAddressFrom(addressDO.getAddressFrom());
+		chainDO.setAddressTo(addressDO.getAddressTo());
+		chainDO.setDataStatus(CodeConstant.DATA_CHAIN_STATUS.PENDING);
+		chainDO.setData(data);
+		chainDO.setNonce(nonce);
+		chainDO.setCreated(new Date());
+		chainDO.setStatus(1);
+
+		return chainDO;
+	}
+
 	// 获取nonce
-	private String nonce(String address) {
+	private String getNonce(String address) {
 		// 从区块链去取数据
 		JSONObject jo = HttpClientUtils.httpGet(bswurl + "data/nonce?address=" + address);
+
 		String nonceStr = jo.get("nonce").toString();
-		BigInteger nonce = new BigInteger(nonceStr.substring(2), 16);
-		String chainNonce = "0x" + nonce.toString(16);
 
-		// LinkedList<String> nonceList = new LinkedList<>();
-		// if (nonceList.size() == 0) {
-		// nonceList.add(chainNonce);
-		// } else {
-		// // 如果服务器获取的已经在数据库list中存在 取出list中的最新的nonce
-		// if (nonceList.contains(chainNonce)) {
-		// String topNonceStr = nonceList.getLast();
-		// // 类型转换
-		// BigInteger topNonce = new BigInteger(topNonceStr.substring(2), 16);
-		// // nonce+1
-		// chainNonce = "0x" + topNonce.add(new BigInteger("1", 16)).toString(16);
-		// nonceList.add(chainNonce);
-		// } else {
-		// nonceList.add(chainNonce);
-		// }
-		// }
 
-		// 数据库查询 企业nonce todo
-		// if (condition) {//数据库有
-		// //top1 + 1
-		// String topNonceStr = 查数据库
-		// chainNonce = "0x" + topNonce.add(new BigInteger("1", 16)).toString(16);
-		// }
-		// 如果没有 直接用
-		// 写入数据库
+		Map map = new HashMap(1);
+		map.put("nonce",nonceStr);
+		List<ChainDO> chainDOs= chainDao.list(map);
+		if(Optional.ofNullable(chainDOs).isPresent()
+				&& Optional.ofNullable(chainDOs.get(0)).isPresent()){//不为null
+			List<ChainDO> list = chainDao.list(new HashMap<>());
+			if(Optional.ofNullable(list).isPresent()){
 
-		return chainNonce;
+				BigInteger  maxNonceStr = findMaxBigIntegerNonce(list);
+
+				BigInteger noncePlusOne = maxNonceStr.add(BigInteger.ONE);
+				//十六进制
+				nonceStr = "0x" + noncePlusOne.toString(16);
+			}
+
+
+		}
+			return nonceStr;
+
+	}
+
+	private BigInteger findMaxBigIntegerNonce(List<ChainDO> list) {
+		BigInteger maxIntNonce =BigInteger.ZERO;
+		for ( ChainDO  chainDO:list) {
+			String nonce = chainDO.getNonce();
+			//十进制
+			BigInteger tenNonce = new BigInteger(nonce.substring(2), 16);
+			if(maxIntNonce.compareTo(tenNonce)<0){
+				maxIntNonce =tenNonce;
+			}
+
+		}
+
+		return maxIntNonce;
 	}
 
 	private String jsonData(String from, String to, String password, String data, String nonce) {

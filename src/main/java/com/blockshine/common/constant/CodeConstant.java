@@ -73,9 +73,24 @@ public class CodeConstant {
     public static final int CHAIN_NODATA = 5000002;
 
 
+    /**
+     * address error code
+     */
+    public static final int NOT_EXIST_ADDRESS_ERROR = 6000001;
+
+
+
     public static final String TOKEN = "token:";
 
     public static final String REFRESH_TOKEN = "token:refresh:";
+
+    public  interface DATA_CHAIN_STATUS{
+        //状态 1:penging 2:sucess 3:falied
+         int PENDING = 1;
+         int SUCESS = 2;
+         int FALID = 3;
+
+    }
 	
 
 }

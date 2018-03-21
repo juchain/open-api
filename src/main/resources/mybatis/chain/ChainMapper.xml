@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blockshine.dao.ChainDao">
+
+	<select id="get" resultType="com.blockshine.domain.ChainDO">
+		select `id`,`created`,`updated`,`status`,`nonce`,`adress_from`,`address_to`,`data`,`receipt`,`data_status`,message from data_chain where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.blockshine.domain.ChainDO">
+		select `id`,`created`,`updated`,`status`,`nonce`,`adress_from`,`address_to`,`data`,`receipt`,`data_status`,message from data_chain
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="created != null and created != ''"> and created = #{created} </if>
+		  		  <if test="updated != null and updated != ''"> and updated = #{updated} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		  <if test="nonce != null and nonce != ''"> and nonce = #{nonce} </if>
+		  		  <if test="adressFrom != null and adressFrom != ''"> and adress_from = #{adressFrom} </if>
+		  		  <if test="addressTo != null and addressTo != ''"> and address_to = #{addressTo} </if>
+		  		  <if test="data != null and data != ''"> and data = #{data} </if>
+		  		  <if test="receipt != null and receipt != ''"> and receipt = #{receipt} </if>
+		  		  <if test="dataStatus != null and dataStatus != ''"> and data_status = #{dataStatus} </if>
+		  		  <if test="message != null and message != ''"> and message = #{message} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from data_chain
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="created != null and created != ''"> and created = #{created} </if>
+		  		  <if test="updated != null and updated != ''"> and updated = #{updated} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		  <if test="nonce != null and nonce != ''"> and nonce = #{nonce} </if>
+		  		  <if test="adressFrom != null and adressFrom != ''"> and adress_from = #{adressFrom} </if>
+		  		  <if test="addressTo != null and addressTo != ''"> and address_to = #{addressTo} </if>
+		  		  <if test="data != null and data != ''"> and data = #{data} </if>
+		  		  <if test="receipt != null and receipt != ''"> and receipt = #{receipt} </if>
+		  		  <if test="dataStatus != null and dataStatus != ''"> and data_status = #{dataStatus} </if>
+		  		  <if test="message != null and message != ''"> and message = #{message} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.blockshine.domain.ChainDO" useGeneratedKeys="true" keyProperty="id">
+		insert into data_chain
+		(
+			`created`, 
+			`updated`, 
+			`status`, 
+			`nonce`, 
+			`adress_from`, 
+			`address_to`,
+			`data`, 
+			`receipt`, 
+			`data_status`,
+			`message`
+		)
+		values
+		(
+			#{created}, 
+			#{updated}, 
+			#{status}, 
+			#{nonce}, 
+			#{adressFrom}, 
+			#{addressTo},
+			#{data}, 
+			#{receipt}, 
+			#{dataStatus},
+			#{message}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.blockshine.domain.ChainDO">
+		update data_chain 
+		<set>
+			<if test="created != null">`created` = #{created}, </if>
+			<if test="updated != null">`updated` = #{updated}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="nonce != null">`nonce` = #{nonce}, </if>
+			<if test="adressFrom != null">`adress_from` = #{adressFrom}, </if>
+			<if test="addressTo != null">`address_to` = #{addressTo}, </if>
+			<if test="data != null">`data` = #{data}, </if>
+			<if test="receipt != null">`receipt` = #{receipt}, </if>
+			<if test="dataStatus != null">`data_status` = #{dataStatus}</if>
+			<if test="message != null">`message` = #{message}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from data_chain where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from data_chain where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
