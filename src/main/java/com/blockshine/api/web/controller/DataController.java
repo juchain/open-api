@@ -5,10 +5,7 @@ import com.blockshine.common.util.JedisUtil;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.alibaba.fastjson.JSONObject;
 import com.blockshine.api.service.DataService;
 import com.blockshine.common.constant.CodeConstant;
@@ -32,7 +29,7 @@ public class DataController {
 	// 查询交易信息
 	@RequestMapping(value = "/write", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	public R dataWrite(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, String data) throws Exception {
+	public R dataWrite(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestParam String data) throws Exception {
 
         String token = httpRequest.getHeader("token");
         if (StringUtils.isEmpty(token)) {
@@ -48,4 +45,7 @@ public class DataController {
 		r.put("chainData", result);
 		return r;
 	}
+
+
+
 }

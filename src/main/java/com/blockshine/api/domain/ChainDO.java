@@ -37,7 +37,6 @@ public class ChainDO implements Serializable {
 	//状态 1:init 2:sucess 3:falied
 	private Integer dataStatus;
 	//接口返回信息
-
 	private String message;
 
 

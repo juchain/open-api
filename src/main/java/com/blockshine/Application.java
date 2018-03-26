@@ -30,6 +30,7 @@ import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomize
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.servlet.Filter;
 
@@ -37,6 +38,7 @@ import javax.servlet.Filter;
 
 @SpringBootApplication
 @EnableScheduling
+@EnableTransactionManagement
 public class Application {
 
     //4 core + 8 giga-bytes configuration
@@ -89,7 +91,8 @@ public class Application {
      * - perform action and exit on completion.
      */
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(Application.class, args);
+
+       SpringApplication.run(Application.class, args);
     }
 }
 

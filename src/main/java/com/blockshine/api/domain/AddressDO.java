@@ -5,8 +5,6 @@ import java.util.Date;
 
 
 /**
- * 
- * 
  * @author chglee
  * @email 1992lcg@163.com
  * @date 2018-03-19 18:22:22
@@ -30,6 +28,8 @@ public class AddressDO implements Serializable {
 	private String addressFrom;
 	//转入地址
 	private String addressTo;
+	private String appKey;
+	private String password;
 
 	/**
 	 * 设置：
@@ -118,5 +118,21 @@ public class AddressDO implements Serializable {
 
 	public void setAddressTo(String addressTo) {
 		this.addressTo = addressTo;
+	}
+
+	public String getAppKey() {
+		return appKey;
+	}
+
+	public void setAppKey(String appKey) {
+		this.appKey = appKey;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

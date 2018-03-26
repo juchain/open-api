@@ -11,11 +11,13 @@ import com.blockshine.common.config.JedisService;
 import com.blockshine.common.constant.CodeConstant;
 import com.blockshine.common.exception.BusinessException;
 import com.blockshine.common.exception.InvalidTokenBusinessException;
+
 import com.blockshine.common.util.JedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -31,14 +33,18 @@ public class DataService {
 	@Autowired
 	private AddressDao addressDao;
 
-
-	@Autowired
-	JedisService jedisService;
-
+    //1G=1024M,1M=1024KB,1KB=1024Byte.
+	private static int oneM=1048576;
 
 
 
+    @Transactional
 	public JSONObject wirteDataToChain(String data, String token) {
+
+		int dataLength =data.getBytes().length;
+		if(oneM<dataLength){
+			throw  new BusinessException("上传数据不可以超出1M",CodeConstant.NOT_GT_ONEM_ERROR);
+		}
 
 		if(!JedisUtil.hasKey(token)){
 			throw  new InvalidTokenBusinessException("token 不存在",CodeConstant.NOT_TOKEN);
@@ -47,14 +53,15 @@ public class DataService {
 		Map<String, Object> parms = new HashMap<>(1);
 		parms.put("appKey",appKey);
 		List<AddressDO> list = addressDao.list(parms);
-		if(!Optional.ofNullable(list).isPresent()){
+		if(list== null || list.size()==0){
 			throw  new BusinessException("开户地址不存在",CodeConstant.NOT_EXIST_ADDRESS_ERROR);
 		}
+
 		AddressDO addressDO = list.get(0);
 		// 企业 上链请求nonce
 		String nonce = getNonce(addressDO.getAddressFrom());
 
-		String jsonData = jsonData(addressDO.getAddressFrom(), addressDO.getAddressTo(), addressDO.getAddressTo(), data, nonce);
+		String jsonData = jsonData(addressDO.getAddressFrom(), addressDO.getAddressTo(), addressDO.getPassword(), data, nonce);
 
 		ChainDO chainDO = gennerateChainDo(addressDO, jsonData, nonce);
 
@@ -63,7 +70,7 @@ public class DataService {
 		JSONObject jo = HttpClientUtils.httpPost(bswurl + "data/write", JSONObject.parseObject(jsonData));
 
 		ChainDO updataChainDo= new ChainDO();
-		if(jo.get("code").equals(0)){
+		if("0".equals(jo.get("code"))){
 			updataChainDo.setReceipt(jo.get("receipt").toString());
 		}
 		updataChainDo.setId(chainDO.getId());
@@ -97,10 +104,9 @@ public class DataService {
 		Map map = new HashMap(1);
 		map.put("nonce",nonceStr);
 		List<ChainDO> chainDOs= chainDao.list(map);
-		if(Optional.ofNullable(chainDOs).isPresent()
-				&& Optional.ofNullable(chainDOs.get(0)).isPresent()){//不为null
+		if( chainDOs !=null && chainDOs.size()!=0){//不为null
 			List<ChainDO> list = chainDao.list(new HashMap<>());
-			if(Optional.ofNullable(list).isPresent()){
+			if(list!=null&list.size()!=0){
 
 				BigInteger  maxNonceStr = findMaxBigIntegerNonce(list);
 
@@ -139,5 +145,7 @@ public class DataService {
 		m.put("nonce", nonce);
 		return JSON.toJSONString(m);
 	}
+
+
 
 }

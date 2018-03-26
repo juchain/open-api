@@ -66,7 +66,7 @@ public class CodeConstant {
      * 底层链错误
      */
     public static final int CHAIN_ERROR = 5000001;
-    
+
     /**
      * 底层链无数据返回
      */
@@ -77,6 +77,11 @@ public class CodeConstant {
      * address error code
      */
     public static final int NOT_EXIST_ADDRESS_ERROR = 6000001;
+
+    /**
+     *上传数据不可以大于1M
+     */
+    public static final int NOT_GT_ONEM_ERROR = 7000001;
 
 
 
