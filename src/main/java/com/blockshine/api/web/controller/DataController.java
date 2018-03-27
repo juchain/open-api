@@ -1,9 +1,6 @@
 package com.blockshine.api.web.controller;
 
 import com.blockshine.common.exception.InvalidTokenBusinessException;
-import com.blockshine.common.util.JedisUtil;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.fastjson.JSONObject;
@@ -45,7 +42,4 @@ public class DataController {
 		r.put("chainData", result);
 		return r;
 	}
-
-
-
 }

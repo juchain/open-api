@@ -59,6 +59,11 @@ public class CodeConstant {
      * 拒绝服务
      */
     public static final int SERVICE_REFUSED = 4000101;
+    
+    /**
+     * 数据服务异常
+     */
+    public static final int DATA_SERVICE_ERROR = 4000102;
 
 
 

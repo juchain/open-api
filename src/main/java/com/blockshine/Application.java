@@ -1,5 +1,4 @@
 /*
- * Copyright 2015, 2016 Ether.Camp Inc. (US)
  * This file is part of Ethereum Harmony.
  *
  * Ethereum Harmony is free software: you can redistribute it and/or modify
@@ -18,13 +17,11 @@
 
 package com.blockshine;
 
-import com.blockshine.api.web.filter.AccessFilter;
 import org.apache.coyote.http11.AbstractHttp11JsseProtocol;
 import org.apache.tomcat.util.net.Nio2Channel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
@@ -32,7 +29,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.servlet.Filter;
 
 
 
@@ -49,11 +45,12 @@ public class Application {
     private int maxConnections = 800;
 
     @Bean
+    @SuppressWarnings("unchecked")
     public EmbeddedServletContainerFactory embeddedServletContainerFactory() {
         TomcatEmbeddedServletContainerFactory tomcatEmbeddedServletContainerFactory = new TomcatEmbeddedServletContainerFactory();
         tomcatEmbeddedServletContainerFactory.setProtocol("org.apache.coyote.http11.Http11Nio2Protocol");
         tomcatEmbeddedServletContainerFactory.addConnectorCustomizers((TomcatConnectorCustomizer) connector -> {
-            AbstractHttp11JsseProtocol<Nio2Channel> handler = (AbstractHttp11JsseProtocol)connector.getProtocolHandler();
+			AbstractHttp11JsseProtocol<Nio2Channel> handler = (AbstractHttp11JsseProtocol<Nio2Channel>)connector.getProtocolHandler();
             handler.setMaxThreads(Runtime.getRuntime().availableProcessors() * maxThreads);
             handler.setMaxConnections(maxConnections);
         });

@@ -7,7 +7,6 @@ import com.blockshine.api.dao.ChainDao;
 import com.blockshine.api.domain.AddressDO;
 import com.blockshine.api.domain.ChainDO;
 import com.blockshine.api.util.HttpClientUtils;
-import com.blockshine.common.config.JedisService;
 import com.blockshine.common.constant.CodeConstant;
 import com.blockshine.common.exception.BusinessException;
 import com.blockshine.common.exception.InvalidTokenBusinessException;
@@ -58,6 +57,7 @@ public class DataService {
 		}
 
 		AddressDO addressDO = list.get(0);
+		
 		// 企业 上链请求nonce
 		String nonce = getNonce(addressDO.getAddressFrom());
 
@@ -66,6 +66,9 @@ public class DataService {
 		ChainDO chainDO = gennerateChainDo(addressDO, jsonData, nonce);
 
 		int save = chainDao.save(chainDO);
+		if (save <= 0) {
+			throw  new BusinessException("数据服务错误",CodeConstant.DATA_SERVICE_ERROR);
+		}
 
 		JSONObject jo = HttpClientUtils.httpPost(bswurl + "data/write", JSONObject.parseObject(jsonData));
 
@@ -97,11 +100,8 @@ public class DataService {
 	private String getNonce(String address) {
 		// 从区块链去取数据
 		JSONObject jo = HttpClientUtils.httpGet(bswurl + "data/nonce?address=" + address);
-
 		String nonceStr = jo.get("nonce").toString();
-
-
-		Map map = new HashMap(1);
+		Map<String,Object> map = new HashMap<String,Object>(1);
 		map.put("nonce",nonceStr);
 		List<ChainDO> chainDOs= chainDao.list(map);
 		if( chainDOs !=null && chainDOs.size()!=0){//不为null
