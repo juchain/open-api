@@ -32,48 +32,47 @@ public class DataService {
 	@Autowired
 	private AddressDao addressDao;
 
-    //1G=1024M,1M=1024KB,1KB=1024Byte.
-	private static int oneM=1048576;
+	// 1G=1024M,1M=1024KB,1KB=1024Byte.
+	private static int oneM = 1048576;
 
-
-
-    @Transactional
+	@Transactional
 	public JSONObject wirteDataToChain(String data, String token) {
 
-		int dataLength =data.getBytes().length;
-		if(oneM<dataLength){
-			throw  new BusinessException("上传数据不可以超出1M",CodeConstant.NOT_GT_ONEM_ERROR);
+		int dataLength = data.getBytes().length;
+		if (oneM < dataLength) {
+			throw new BusinessException("上传数据不可以超出1M", CodeConstant.NOT_GT_ONEM_ERROR);
 		}
 
-		if(!JedisUtil.hasKey(token)){
-			throw  new InvalidTokenBusinessException("token 不存在",CodeConstant.NOT_TOKEN);
+		if (!JedisUtil.hasKey(token)) {
+			throw new InvalidTokenBusinessException("token 不存在", CodeConstant.NOT_TOKEN);
 		}
 		String appKey = JedisUtil.getByKey(token);
 		Map<String, Object> parms = new HashMap<>(1);
-		parms.put("appKey",appKey);
+		parms.put("appKey", appKey);
 		List<AddressDO> list = addressDao.list(parms);
-		if(list== null || list.size()==0){
-			throw  new BusinessException("开户地址不存在",CodeConstant.NOT_EXIST_ADDRESS_ERROR);
+		if (list == null || list.size() == 0) {
+			throw new BusinessException("账户信息不存在", CodeConstant.NOT_EXIST_ADDRESS_ERROR);
 		}
 
 		AddressDO addressDO = list.get(0);
-		
+
 		// 企业 上链请求nonce
 		String nonce = getNonce(addressDO.getAddressFrom());
 
-		String jsonData = jsonData(addressDO.getAddressFrom(), addressDO.getAddressTo(), addressDO.getPassword(), data, nonce);
+		String jsonData = jsonData(addressDO.getAddressFrom(), addressDO.getAddressTo(), addressDO.getPassword(), data,
+				nonce);
 
 		ChainDO chainDO = gennerateChainDo(addressDO, jsonData, nonce);
 
 		int save = chainDao.save(chainDO);
 		if (save <= 0) {
-			throw  new BusinessException("数据服务错误",CodeConstant.DATA_SERVICE_ERROR);
+			throw new BusinessException("数据服务错误", CodeConstant.DATA_SERVICE_ERROR);
 		}
 
 		JSONObject jo = HttpClientUtils.httpPost(bswurl + "data/write", JSONObject.parseObject(jsonData));
 
-		ChainDO updataChainDo= new ChainDO();
-		if("0".equals(jo.get("code"))){
+		ChainDO updataChainDo = new ChainDO();
+		if ("0".equals(jo.get("code"))) {
 			updataChainDo.setReceipt(jo.get("receipt").toString());
 		}
 		updataChainDo.setId(chainDO.getId());
@@ -101,38 +100,31 @@ public class DataService {
 		// 从区块链去取数据
 		JSONObject jo = HttpClientUtils.httpGet(bswurl + "data/nonce?address=" + address);
 		String nonceStr = jo.get("nonce").toString();
-		Map<String,Object> map = new HashMap<String,Object>(1);
-		map.put("nonce",nonceStr);
-		List<ChainDO> chainDOs= chainDao.list(map);
-		if( chainDOs !=null && chainDOs.size()!=0){//不为null
+		Map<String, Object> map = new HashMap<String, Object>(1);
+		map.put("nonce", nonceStr);
+		List<ChainDO> chainDOs = chainDao.list(map);
+		if (chainDOs != null && chainDOs.size() >= 0) {// 不为null
 			List<ChainDO> list = chainDao.list(new HashMap<>());
-			if(list!=null&list.size()!=0){
-
-				BigInteger  maxNonceStr = findMaxBigIntegerNonce(list);
-
+			if (list != null & list.size() != 0) {
+				BigInteger maxNonceStr = findMaxBigIntegerNonce(list);
 				BigInteger noncePlusOne = maxNonceStr.add(BigInteger.ONE);
-				//十六进制
+				// 十六进制
 				nonceStr = "0x" + noncePlusOne.toString(16);
 			}
-
-
 		}
-			return nonceStr;
-
+		return nonceStr;
 	}
 
 	private BigInteger findMaxBigIntegerNonce(List<ChainDO> list) {
-		BigInteger maxIntNonce =BigInteger.ZERO;
-		for ( ChainDO  chainDO:list) {
+		BigInteger maxIntNonce = BigInteger.ZERO;
+		for (ChainDO chainDO : list) {
 			String nonce = chainDO.getNonce();
-			//十进制
+			// 十进制
 			BigInteger tenNonce = new BigInteger(nonce.substring(2), 16);
-			if(maxIntNonce.compareTo(tenNonce)<0){
-				maxIntNonce =tenNonce;
+			if (maxIntNonce.compareTo(tenNonce) < 0) {
+				maxIntNonce = tenNonce;
 			}
-
 		}
-
 		return maxIntNonce;
 	}
 
@@ -145,7 +137,5 @@ public class DataService {
 		m.put("nonce", nonce);
 		return JSON.toJSONString(m);
 	}
-
-
 
 }
