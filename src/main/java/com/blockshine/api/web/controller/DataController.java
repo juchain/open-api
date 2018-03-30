@@ -26,7 +26,7 @@ public class DataController {
 	// 查询交易信息
 	@RequestMapping(value = "/write", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	public R dataWrite(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestParam String data) throws Exception {
+	public R dataWrite(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestBody String data) throws Exception {
 
         String token = httpRequest.getHeader("token");
         if (StringUtils.isEmpty(token)) {
