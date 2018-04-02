@@ -24,7 +24,7 @@ public class DataController {
 	DataService dataService;
 
 	// 查询交易信息
-	@RequestMapping(value = "/write", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	@ResponseBody
 	public R dataWrite(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestBody String data) throws Exception {
 
@@ -37,7 +37,27 @@ public class DataController {
 		if (StringUtils.isEmpty(data)) {
 			throw new BusinessException("No data", CodeConstant.PARAM_LOST);
 		}
-		JSONObject result = dataService.wirteDataToChain(data,token);
+		JSONObject result = dataService.writeDataToChain(data,token);
+		R r = new R();
+		r.put("chainData", result);
+		return r;
+	}
+
+	// 查询交易信息
+	@RequestMapping(value = "/read", method = RequestMethod.POST)
+	@ResponseBody
+	public R dataRead(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestParam String receipt) throws Exception {
+
+		String token = httpRequest.getHeader("token");
+		if (StringUtils.isEmpty(token)) {
+			throw new InvalidTokenBusinessException("token参数丢失",CodeConstant.PARAM_LOST);
+		}
+
+		log.info("method:dataRead receipt:" + receipt);
+		if (StringUtils.isEmpty(receipt)) {
+			throw new BusinessException("No receipt", CodeConstant.PARAM_LOST);
+		}
+		JSONObject result = dataService.readDataFromChain(receipt,token);
 		R r = new R();
 		r.put("chainData", result);
 		return r;

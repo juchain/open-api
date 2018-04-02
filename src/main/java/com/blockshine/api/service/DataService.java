@@ -12,6 +12,7 @@ import com.blockshine.common.exception.BusinessException;
 import com.blockshine.common.exception.InvalidTokenBusinessException;
 
 import com.blockshine.common.util.JedisUtil;
+import com.blockshine.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class DataService {
 	private static int oneM = 1048576;
 
 	@Transactional
-	public JSONObject wirteDataToChain(String data, String token) {
+	public JSONObject writeDataToChain(String data, String token) {
 
 		int dataLength = data.getBytes().length;
 		if (oneM < dataLength) {
@@ -62,7 +63,7 @@ public class DataService {
 		String jsonData = jsonData(addressDO.getAddressFrom(), addressDO.getAddressTo(), addressDO.getPassword(), data,
 				nonce);
 
-		ChainDO chainDO = gennerateChainDo(addressDO, jsonData, nonce);
+		ChainDO chainDO = generateChainDo(addressDO, jsonData, nonce);
 
 		int save = chainDao.save(chainDO);
 		if (save <= 0) {
@@ -82,7 +83,23 @@ public class DataService {
 		return jo;
 	}
 
-	private ChainDO gennerateChainDo(AddressDO addressDO, String data, String nonce) {
+	@Transactional
+	public JSONObject readDataFromChain(String receipt, String token) {
+		if (!JedisUtil.hasKey(token)) {
+			throw new InvalidTokenBusinessException("token 不存在", CodeConstant.NOT_TOKEN);
+		}
+		String appKey = JedisUtil.getByKey(token);
+		Map<String, Object> parms = new HashMap<>(1);
+		parms.put("appKey", appKey);
+		List<AddressDO> list = addressDao.list(parms);
+		if (list == null || list.size() == 0) {
+			throw new BusinessException("账户信息不存在", CodeConstant.NOT_EXIST_ADDRESS_ERROR);
+		}
+		JSONObject jo = HttpClientUtils.httpGet(bswurl + "data/info?hash=" + receipt);
+		return jo;
+	}
+
+	private ChainDO generateChainDo(AddressDO addressDO, String data, String nonce) {
 		ChainDO chainDO = new ChainDO();
 		chainDO.setAddressFrom(addressDO.getAddressFrom());
 		chainDO.setAddressTo(addressDO.getAddressTo());
