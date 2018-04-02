@@ -23,7 +23,7 @@ public class DataController {
 	@Autowired
 	DataService dataService;
 
-	// 查询交易信息
+	// 数据写入链中
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	@ResponseBody
 	public R dataWrite(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestParam String data) throws Exception {
@@ -43,7 +43,7 @@ public class DataController {
 		return r;
 	}
 
-	// 查询交易信息
+	// 查询链中数据
 	@RequestMapping(value = "/read", method = RequestMethod.POST)
 	@ResponseBody
 	public R dataRead(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestParam String receipt) throws Exception {
