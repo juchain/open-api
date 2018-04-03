@@ -11,3 +11,5 @@ deploy:
     - docker build -t $REGISTRY/$LIBRARY:$CI_COMMIT_SHA .
     - docker push $REGISTRY/$LIBRARY:$CI_COMMIT_SHA
     - kubectl set image deployment/open-api open-api=$REGISTRY/$LIBRARY:$CI_COMMIT_SHA -n $CI_COMMIT_REF_NAME
+  only:
+    - test
