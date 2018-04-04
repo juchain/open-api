@@ -24,7 +24,7 @@ public class DataController {
 	DataService dataService;
 
 	// 数据写入链中
-	@RequestMapping(value = "/write", method = RequestMethod.POST)
+	@RequestMapping(value = "/write", method = RequestMethod.POST,consumes = "application/json")
 	@ResponseBody
 	public R dataWrite(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestBody String data) throws Exception {
 
@@ -43,8 +43,9 @@ public class DataController {
 		return r;
 	}
 
+
 	// 查询链中数据
-	@RequestMapping(value = "/read", method = RequestMethod.POST)
+	@RequestMapping(value = "/read", method = RequestMethod.POST,consumes = "application/json")
 	@ResponseBody
 	public R dataRead(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestParam String receipt) throws Exception {
 

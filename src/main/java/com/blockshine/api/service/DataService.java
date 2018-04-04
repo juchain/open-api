@@ -7,11 +7,11 @@ import com.blockshine.api.dao.ChainDao;
 import com.blockshine.api.domain.AddressDO;
 import com.blockshine.api.domain.ChainDO;
 import com.blockshine.api.util.HttpClientUtils;
+import com.blockshine.common.config.JedisService;
 import com.blockshine.common.constant.CodeConstant;
 import com.blockshine.common.exception.BusinessException;
 import com.blockshine.common.exception.InvalidTokenBusinessException;
 
-import com.blockshine.common.util.JedisUtil;
 import com.blockshine.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +33,9 @@ public class DataService {
 	@Autowired
 	private AddressDao addressDao;
 
+	@Autowired
+	private JedisService jedisService;
+
 	// 1G=1024M,1M=1024KB,1KB=1024Byte.
 	private static int oneM = 1048576;
 
@@ -44,10 +47,10 @@ public class DataService {
 			throw new BusinessException("上传数据不可以超出1M", CodeConstant.NOT_GT_ONEM_ERROR);
 		}
 
-		if (!JedisUtil.hasKey(token)) {
+		if (!jedisService.hasKey(token)) {
 			throw new InvalidTokenBusinessException("token 不存在", CodeConstant.NOT_TOKEN);
 		}
-		String appKey = JedisUtil.getByKey(token);
+		String appKey = jedisService.getByKey(token);
 		Map<String, Object> parms = new HashMap<>(1);
 		parms.put("appKey", appKey);
 		List<AddressDO> list = addressDao.list(parms);
@@ -85,10 +88,10 @@ public class DataService {
 
 	@Transactional
 	public JSONObject readDataFromChain(String receipt, String token) {
-		if (!JedisUtil.hasKey(token)) {
+		if (!jedisService.hasKey(token)) {
 			throw new InvalidTokenBusinessException("token 不存在", CodeConstant.NOT_TOKEN);
 		}
-		String appKey = JedisUtil.getByKey(token);
+		String appKey = jedisService.getByKey(token);
 		Map<String, Object> parms = new HashMap<>(1);
 		parms.put("appKey", appKey);
 		List<AddressDO> list = addressDao.list(parms);

@@ -1,10 +1,14 @@
 package com.blockshine.api.web.filter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.blockshine.common.config.JedisService;
 import com.blockshine.common.constant.CodeConstant;
-import com.blockshine.common.util.JedisUtil;
+
+import com.blockshine.common.util.SpringContextHolder;
 import com.blockshine.common.util.StringUtils;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,11 +24,14 @@ public class AccessFilter implements Filter {
 	 * 封装，不需要过滤的list列表
 	 */
 	private static List<String> patterns = new ArrayList<String>();
+	private WebApplicationContext wac;
 
-	// private JedisService jedisService;
+	// private JedisService jedisService= SpringContextHolder.getBean("jedisService");
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
+
+		wac = (WebApplicationContext) filterConfig.getServletContext().getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 
 		// 不验证放行 url
 		// patterns.add("/token/apply");
@@ -54,9 +61,10 @@ public class AccessFilter implements Filter {
 	private void processFilter(FilterChain chain, HttpServletRequest httpRequest, HttpServletResponse httpResponse)
 			throws IOException, ServletException {
 		String token = httpRequest.getHeader("token");
+		JedisService jedisService = wac.getBean(JedisService.class);
 		if (StringUtils.isEmpty(token)) {
 			doPrintWriter(httpResponse, CodeConstant.PARAM_LOST, "token参数丢失");
-		} else if (!JedisUtil.hasKey(token)) {
+		} else if (!jedisService.hasKey(token)) {
 			doPrintWriter(httpResponse, CodeConstant.EXPIRED_TOKEN, "token终止，请重新获取!");
 		} else {
 			chain.doFilter(httpRequest, httpResponse);
