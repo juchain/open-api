@@ -17,6 +17,7 @@
 
 package com.blockshine;
 
+import com.blockshine.api.web.filter.AccessFilter;
 import org.apache.coyote.http11.AbstractHttp11JsseProtocol;
 import org.apache.tomcat.util.net.Nio2Channel;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,11 +26,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-
+import javax.servlet.Filter;
 
 
 @SpringBootApplication
@@ -58,28 +60,28 @@ public class Application {
         return tomcatEmbeddedServletContainerFactory;
     }
 
-//    /**
-//     * 配置过滤器
-//     * @return
-//     */
-//    @Bean
-//    public FilterRegistrationBean someFilterRegistration() {
-//        FilterRegistrationBean registration = new FilterRegistrationBean();
-//        registration.setFilter(accessFilter());
-//        registration.addUrlPatterns("/*");
-//        registration.addInitParameter("paramName", "paramValue");
-//        registration.setName("accessFilter");
-//        return registration;
-//    }
-//
-//    /**
-//     * 创建一个bean
-//     * @return`
-//     */
-//    @Bean(name = "accessFilter")
-//    public Filter accessFilter() {
-//        return new AccessFilter();
-//    }
+    /**
+     * 配置过滤器
+     * @return
+     */
+    @Bean
+    public FilterRegistrationBean someFilterRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(accessFilter());
+        registration.addUrlPatterns("/*");
+        registration.addInitParameter("paramName", "paramValue");
+        registration.setName("accessFilter");
+        return registration;
+    }
+
+    /**
+     * 创建一个bean
+     * @return`
+     */
+    @Bean(name = "accessFilter")
+    public Filter accessFilter() {
+        return new AccessFilter();
+    }
 
 
     /**
