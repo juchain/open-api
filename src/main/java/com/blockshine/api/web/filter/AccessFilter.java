@@ -33,7 +33,7 @@ public class AccessFilter implements Filter {
 		wac = (WebApplicationContext) filterConfig.getServletContext().getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 
 		// 不验证放行 url
-		// patterns.add("/token/apply");
+		 patterns.add("/hs");
 
 	}
 
