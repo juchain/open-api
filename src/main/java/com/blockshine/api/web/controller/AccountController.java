@@ -55,24 +55,24 @@ public class AccountController extends BaseController {
 		return r;
     }
 
-//	//数据上链测试
-//	@RequestMapping(value = "/test", method = RequestMethod.GET)
-//	@ResponseBody
-//	public Map<String, Object> test(String size) throws InterruptedException{
-//		Map<String, Object> mm = new HashMap<>();
-//		List<Map<String, String>> list = new ArrayList<>();
-//		Integer s = Integer.valueOf(size);
-//		for (int i = 0; i < 10; i++) {
-//			System.out.println("第"+(i+1)+"次执行");
-////			s=s+1;
-//			Map<String, String> result = bswCallService.test(s);
-//			list.add(result);
-////			Thread.sleep(5000);
-//		}
-//		double xAvg = list.stream().mapToDouble(item -> Integer.valueOf(item.get("5写链时间差")).doubleValue()).average().getAsDouble();
-//		mm.put("采集数据", list);
-//		mm.put("平均上链时差", xAvg);
-//		return mm;
-//    }
+	//	//数据上链测试
+	//	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	//	@ResponseBody
+	//	public Map<String, Object> test(String size) throws InterruptedException{
+	//		Map<String, Object> mm = new HashMap<>();
+	//		List<Map<String, String>> list = new ArrayList<>();
+	//		Integer s = Integer.valueOf(size);
+	//		for (int i = 0; i < 10; i++) {
+	//			System.out.println("第"+(i+1)+"次执行");
+	////			s=s+1;
+	//			Map<String, String> result = bswCallService.test(s);
+	//			list.add(result);
+	////			Thread.sleep(5000);
+	//		}
+	//		double xAvg = list.stream().mapToDouble(item -> Integer.valueOf(item.get("5写链时间差")).doubleValue()).average().getAsDouble();
+	//		mm.put("采集数据", list);
+	//		mm.put("平均上链时差", xAvg);
+	//		return mm;
+	//    }
 	
 }
