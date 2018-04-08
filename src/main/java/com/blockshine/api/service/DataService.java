@@ -11,8 +11,6 @@ import com.blockshine.common.config.JedisService;
 import com.blockshine.common.constant.CodeConstant;
 import com.blockshine.common.exception.BusinessException;
 import com.blockshine.common.exception.InvalidTokenBusinessException;
-
-import com.blockshine.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.blockshine.common.config.JedisService;
 import com.blockshine.common.constant.CodeConstant;
 
-import com.blockshine.common.util.SpringContextHolder;
 import com.blockshine.common.util.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
