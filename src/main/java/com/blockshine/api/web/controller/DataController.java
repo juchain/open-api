@@ -3,6 +3,8 @@ package com.blockshine.api.web.controller;
 import com.blockshine.common.exception.InvalidTokenBusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.blockshine.api.service.DataService;
 import com.blockshine.common.constant.CodeConstant;
@@ -55,9 +57,12 @@ public class DataController {
 		}
 
 		log.info("method:dataRead receipt:" + receipt);
-		if (StringUtils.isEmpty(receipt)) {
+		if (StringUtils.isEmpty(receipt)&&JSON.parseObject(receipt).get("receipt")!=null) {
 			throw new BusinessException("No receipt", CodeConstant.PARAM_LOST);
 		}
+		
+		receipt = JSON.parseObject(receipt).get("receipt").toString();
+		
 		JSONObject result = dataService.readDataFromChain(receipt,token);
 		R r = new R();
 		r.put("chainData", result);
