@@ -47,7 +47,7 @@ public class DataController {
 	// 查询链中数据
 	@RequestMapping(value = "/read", method = RequestMethod.POST,consumes = "application/json")
 	@ResponseBody
-	public R dataRead(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestParam String receipt) throws Exception {
+	public R dataRead(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestBody String receipt) throws Exception {
 
 		String token = httpRequest.getHeader("token");
 		if (StringUtils.isEmpty(token)) {
