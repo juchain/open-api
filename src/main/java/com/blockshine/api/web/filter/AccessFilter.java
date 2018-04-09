@@ -1,10 +1,10 @@
 package com.blockshine.api.web.filter;
 
 import com.alibaba.fastjson.JSONObject;
-import com.blockshine.common.config.JedisService;
+import com.blockshine.api.domain.AddressDO;
+import com.blockshine.api.service.DataService;
 import com.blockshine.common.constant.CodeConstant;
 
-import com.blockshine.common.util.SpringContextHolder;
 import com.blockshine.common.util.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
@@ -34,7 +34,7 @@ public class AccessFilter implements Filter {
 		wac = (WebApplicationContext) filterConfig.getServletContext().getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 
 		// 不验证放行 url
-		// patterns.add("/token/apply");
+		 patterns.add("/hs");
 
 	}
 
@@ -60,15 +60,26 @@ public class AccessFilter implements Filter {
 
 	private void processFilter(FilterChain chain, HttpServletRequest httpRequest, HttpServletResponse httpResponse)
 			throws IOException, ServletException {
+		
 		String token = httpRequest.getHeader("token");
-		JedisService jedisService = wac.getBean(JedisService.class);
+		
 		if (StringUtils.isEmpty(token)) {
+			
 			doPrintWriter(httpResponse, CodeConstant.PARAM_LOST, "token参数丢失");
-		} else if (!jedisService.hasKey(token)) {
-			doPrintWriter(httpResponse, CodeConstant.EXPIRED_TOKEN, "token终止，请重新获取!");
+			
 		} else {
-			chain.doFilter(httpRequest, httpResponse);
+			
+			DataService dataService = wac.getBean(DataService.class);
+			AddressDO ado = dataService.checkToken(token);
+			boolean isNull = ado==null?true:false;
+			
+			if (isNull) {
+				doPrintWriter(httpResponse, CodeConstant.EXPIRED_TOKEN, "token终止，请重新获取!");
+			} else {
+				chain.doFilter(httpRequest, httpResponse);
+			}
 		}
+		
 	}
 
 	private void doPrintWriter(HttpServletResponse response, int code, String message) {

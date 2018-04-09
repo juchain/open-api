@@ -7,12 +7,9 @@ import com.blockshine.api.dao.ChainDao;
 import com.blockshine.api.domain.AddressDO;
 import com.blockshine.api.domain.ChainDO;
 import com.blockshine.api.util.HttpClientUtils;
-import com.blockshine.common.config.JedisService;
 import com.blockshine.common.constant.CodeConstant;
 import com.blockshine.common.exception.BusinessException;
 import com.blockshine.common.exception.InvalidTokenBusinessException;
-
-import com.blockshine.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,6 +23,9 @@ public class DataService {
 
 	@Value("${bswurl}")
 	private String bswurl;
+	
+	@Value("${open_platform_test}")
+	private String open_platform_test;
 
 	@Autowired
 	private ChainDao chainDao;
@@ -33,48 +33,27 @@ public class DataService {
 	@Autowired
 	private AddressDao addressDao;
 
-	@Autowired
-	private JedisService jedisService;
 
 	// 1G=1024M,1M=1024KB,1KB=1024Byte.
 	private static int oneM = 1048576;
 
 	@Transactional
 	public JSONObject writeDataToChain(String data, String token) {
-
+		AddressDO addressDO = checkToken(token);
 		int dataLength = data.getBytes().length;
 		if (oneM < dataLength) {
 			throw new BusinessException("上传数据不可以超出1M", CodeConstant.NOT_GT_ONEM_ERROR);
 		}
-
-		if (!jedisService.hasKey(token)) {
-			throw new InvalidTokenBusinessException("token 不存在", CodeConstant.NOT_TOKEN);
-		}
-		String appKey = jedisService.getByKey(token);
-		Map<String, Object> parms = new HashMap<>(1);
-		parms.put("appKey", appKey);
-		List<AddressDO> list = addressDao.list(parms);
-		if (list == null || list.size() == 0) {
-			throw new BusinessException("账户信息不存在", CodeConstant.NOT_EXIST_ADDRESS_ERROR);
-		}
-
-		AddressDO addressDO = list.get(0);
-
 		// 企业 上链请求nonce
 		String nonce = getNonce(addressDO.getAddressFrom());
-
 		String jsonData = jsonData(addressDO.getAddressFrom(), addressDO.getAddressTo(), addressDO.getPassword(), data,
 				nonce);
-
 		ChainDO chainDO = generateChainDo(addressDO, jsonData, nonce);
-
 		int save = chainDao.save(chainDO);
 		if (save <= 0) {
 			throw new BusinessException("数据服务错误", CodeConstant.DATA_SERVICE_ERROR);
 		}
-
 		JSONObject jo = HttpClientUtils.httpPost(bswurl + "data/write", JSONObject.parseObject(jsonData));
-
 		ChainDO updataChainDo = new ChainDO();
 		if ("0".equals(jo.get("code"))) {
 			updataChainDo.setReceipt(jo.get("receipt").toString());
@@ -88,16 +67,7 @@ public class DataService {
 
 	@Transactional
 	public JSONObject readDataFromChain(String receipt, String token) {
-		if (!jedisService.hasKey(token)) {
-			throw new InvalidTokenBusinessException("token 不存在", CodeConstant.NOT_TOKEN);
-		}
-		String appKey = jedisService.getByKey(token);
-		Map<String, Object> parms = new HashMap<>(1);
-		parms.put("appKey", appKey);
-		List<AddressDO> list = addressDao.list(parms);
-		if (list == null || list.size() == 0) {
-			throw new BusinessException("账户信息不存在", CodeConstant.NOT_EXIST_ADDRESS_ERROR);
-		}
+		checkToken(token);
 		JSONObject jo = HttpClientUtils.httpGet(bswurl + "data/info?hash=" + receipt);
 		return jo;
 	}
@@ -156,6 +126,27 @@ public class DataService {
 		m.put("data", data);
 		m.put("nonce", nonce);
 		return JSON.toJSONString(m);
+	}
+
+	public AddressDO checkToken(String token) {
+		String appKey = "";
+		//String appKey = jedisService.getByKey(token);
+		Map<String, String> m = new HashMap<>();
+		m.put("token", token);
+		JSONObject jo = HttpClientUtils.httpPost(open_platform_test + "token/check", JSONObject.parseObject(JSON.toJSONString(m)));
+		if (jo!=null&&jo.get("code")!=null&&"0".equals(jo.get("code").toString())) {
+			appKey = jo.get("appKey").toString();
+		}else {
+			throw new InvalidTokenBusinessException("token 不存在", CodeConstant.NOT_TOKEN);
+		}
+		
+		Map<String, Object> parms = new HashMap<>(1);
+		parms.put("appKey", appKey);
+		List<AddressDO> list = addressDao.list(parms);
+		if (list == null || list.size() == 0) {
+			throw new BusinessException("账户信息不存在", CodeConstant.NOT_EXIST_ADDRESS_ERROR);
+		}
+		return list.get(0);
 	}
 
 }
