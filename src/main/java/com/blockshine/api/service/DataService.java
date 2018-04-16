@@ -84,7 +84,7 @@ public class DataService {
 		return jo;
 	}
 
-	@Transactional
+
 	public JSONObject readDataFromChain(String receipt, String token) {
 		if (!jedisService.hasKey(token)) {
 			throw new InvalidTokenBusinessException("token 不存在", CodeConstant.NOT_TOKEN);
