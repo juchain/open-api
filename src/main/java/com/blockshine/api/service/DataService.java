@@ -65,7 +65,7 @@ public class DataService {
 		return jo;
 	}
 
-	@Transactional
+
 	public JSONObject readDataFromChain(String receipt, String token) {
 		checkToken(token);
 		JSONObject jo = HttpClientUtils.httpGet(bswurl + "data/info?hash=" + receipt);

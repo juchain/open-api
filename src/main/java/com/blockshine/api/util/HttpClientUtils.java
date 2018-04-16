@@ -22,7 +22,7 @@ import java.io.IOException;
 
 /**
  * HttpClient4.3工具类
- * 
+ *
  * @author hang.luo
  */
 public class HttpClientUtils {
@@ -37,7 +37,7 @@ public class HttpClientUtils {
 
 	/**
 	 * post请求传输json参数
-	 * 
+	 *
 	 * @param url
 	 *            url地址
 	 * @param json
@@ -85,7 +85,7 @@ public class HttpClientUtils {
 	/**
 	 * post请求传输String参数 例如：name=Jack&sex=1&type=2
 	 * Content-type:application/x-www-form-urlencoded
-	 * 
+	 *
 	 * @param url
 	 *            url地址
 	 * @param strParam
@@ -130,8 +130,58 @@ public class HttpClientUtils {
 	}
 
 	/**
+	 * post请求传输String参数 例如：name=Jack&sex=1&type=2
+	 * Content-type:application/x-www-form-urlencoded
+	 *
+	 * @param url
+	 *            url地址
+	 * @param strParam
+	 *            参数
+	 * @return
+	 */
+	public static JSONObject httpPostJsonString(String url, String strParam) {
+		// post请求返回结果
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		JSONObject jsonResult = null;
+		HttpPost httpPost = new HttpPost(url);
+		httpPost.setConfig(requestConfig);
+		try {
+			if (null != strParam) {
+				// 解决中文乱码问题
+				StringEntity entity = new StringEntity(strParam, "utf-8");
+				entity.setContentEncoding("UTF-8");
+				entity.setContentType("application/json");
+				httpPost.setEntity(entity);
+			}
+			CloseableHttpResponse result = httpClient.execute(httpPost);
+			// 请求发送成功，并得到响应
+			if (result.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				String str = "";
+				try {
+					// 读取服务器返回过来的json字符串数据
+					str = EntityUtils.toString(result.getEntity(), "utf-8");
+					// 把json字符串转换成json对象
+					jsonResult = JSONObject.parseObject(str);
+				} catch (Exception e) {
+					e.printStackTrace();
+					logger.error("post请求提交失败:" + url, e);
+					//throw new BusinessException(e.getMessage(), CodeConstant.CHAIN_ERROR);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.error("post请求提交失败:" + url, e);
+			//throw new BusinessException(e.getMessage(), CodeConstant.CHAIN_ERROR);
+		} finally {
+			httpPost.releaseConnection();
+		}
+		return chainReturn(jsonResult);
+	}
+
+
+	/**
 	 * 发送get请求
-	 * 
+	 *
 	 * @param url
 	 *            路径
 	 * @return
@@ -167,7 +217,7 @@ public class HttpClientUtils {
 
 	/**
 	 * 发送get请求
-	 * 
+	 *
 	 * @param url
 	 *            路径
 	 * @return
@@ -221,7 +271,7 @@ public class HttpClientUtils {
 
 	/**
 	 * post请求传输json参数
-	 * 
+	 *
 	 * @param url
 	 *            url地址
 	 * @param json

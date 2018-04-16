@@ -23,7 +23,7 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${logs.dir}/harmony.log</file>
+        <file>${logs.dir}/open-api.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover hourly -->
             <fileNamePattern>${logs.dir}/harmony-%d{yyyy-MM-dd_HH}.log.zip</fileNamePattern>
