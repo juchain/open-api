@@ -20,7 +20,7 @@ public class TokenService {
 
 
 
-    @Value("${openPlateformUrl}")
+    @Value("${open_platform_test}")
     private String openPlateformUrl;
 
 

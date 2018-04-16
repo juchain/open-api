@@ -2,9 +2,9 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://47.100.175.16:3306/website?useUnicode=true&characterEncoding=utf8
-    username: pentaadmin
-    password: DevBlock.123!
+    url: jdbc:mysql://172.19.23.98:3306/website?useUnicode=true&characterEncoding=utf8
+    username: webadmin
+    password: OnBlock.123!
     initialSize: 1
     minIdle: 3
     maxActive: 20
@@ -33,4 +33,3 @@ mybatis:
     map-underscore-to-camel-case: true
   mapper-locations: mybatis/*/*Mapper.xml
   typeAliasesPackage: com.blockshine.**.dto
-
