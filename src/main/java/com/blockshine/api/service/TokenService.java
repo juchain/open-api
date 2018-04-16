@@ -52,15 +52,12 @@ public class TokenService {
 
     public R checkToken(String token) {
         log.info(openPlateformUrl+"token/check:"+JSON.toJSONString(token));
-        Map parm = new HashMap(1);
+        Map<String, String> parm = new HashMap<String, String>(1);
         parm.put("token",token);
         JSONObject jsonObject = HttpClientUtils.httpPostJsonString(openPlateformUrl+"token/check", JSON.toJSONString(parm));
         R r= new R();
         r.put("code",jsonObject.get("code"));
         r.put("msg",jsonObject.get("msg"));
-//        if(jsonObject.get("code")!=null&&jsonObject.get("code").equals(0)){
-//            r.put("tokenObject",jsonObject.get("tokenObject"));
-//        }
         return r;
     }
 }
