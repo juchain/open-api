@@ -35,6 +35,9 @@ public class AccessFilter implements Filter {
 
 		// 不验证放行 url
 		 patterns.add("/hs");
+		 patterns.add("/token/apply");
+		 patterns.add("/token/check");
+		 patterns.add("/token/refresh");
 
 	}
 
