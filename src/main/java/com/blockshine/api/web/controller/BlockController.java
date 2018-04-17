@@ -48,7 +48,14 @@ public class BlockController extends BaseController {
 	@ResponseBody
 	public R getBlockInfo(String bnOrId, boolean fullTransactionObjects) {
 		JSONObject blockInfo = bswCallService.getBlockInfo(bnOrId,fullTransactionObjects);
-		System.out.println(blockInfo);
+		if(blockInfo.containsKey("nonce"))
+			blockInfo.remove("nonce");
+		if(blockInfo.containsKey("miner"))
+			blockInfo.remove("miner");
+		if(blockInfo.containsKey("difficulty"))
+			blockInfo.remove("difficulty");
+		if(blockInfo.containsKey("totalDifficulty"))
+			blockInfo.remove("totalDifficulty");
 		R result = new R();
 		result.put("chainData", blockInfo);
 		return result;
@@ -70,6 +77,16 @@ public class BlockController extends BaseController {
 		log.info("block headers");
 		JSONArray blockInfo = bswCallService.getBlocksEndWith(hash,qty);
 		R result = new R();
+		for(Object obj : blockInfo ) {
+			JSONObject json = (JSONObject) obj;
+			if(json.containsKey("nonce"))
+				json.remove("nonce");
+			if(json.containsKey("difficulty"))
+				json.remove("difficulty");
+			if(json.containsKey("difficultyBI"))
+				json.remove("difficultyBI");
+		}
+
 		result.put("chainData", blockInfo);
 		return result;
 	}
